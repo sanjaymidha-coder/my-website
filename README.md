@@ -11,8 +11,7 @@ Marketing site rebuilt from the original static HTML/Tailwind/jQuery pages into
 | `/decostorepros` | `decostorepros.html`  |
 | `/api/contact`   | `contact.php`         |
 
-Old `*.html` URLs redirect permanently to the new routes. The original static
-site is kept for reference in [`legacy/`](legacy/) (not built or deployed).
+Old `*.html` URLs redirect permanently to the new routes.
 
 ## Requirements
 
@@ -35,7 +34,6 @@ npm run dev                  # http://localhost:3000
 | `npm start`               | Serve the production build on port 3000           |
 | `npm run typecheck`       | TypeScript only                                   |
 | `npm run lint`            | ESLint                                            |
-| `npm run optimize:images` | Re-generate WebP versions of heavy source images  |
 
 ## Environment variables
 
@@ -65,7 +63,6 @@ src/
   data/                typed content: projects, services, process steps, FAQs, logos, brand config
   lib/                 GSAP registration, helpers
 public/assets/images   all site imagery (WebP)
-legacy/                original static site, for reference only
 ```
 
 Content lives in `src/data/*` — edit those files to change copy, projects, FAQs, etc.
@@ -80,8 +77,8 @@ In headings, wrap a word in `*asterisks*` to render it in the italic serif accen
   pinned process column, ambient video, cursor/magnetic/tilt) are desktop or
   fine-pointer only.
 
-## Deploying (Netlify)
+## Deploying
 
-`netlify.toml` is included. Netlify detects Next.js and uses its Next.js runtime
-(API routes run as functions). Set the environment variables above in the
-Netlify UI before deploying.
+Any host that supports Next.js 15 works (e.g. Vercel or Netlify — both detect
+Next.js automatically, no extra config file needed). Set the environment
+variables above in the host's dashboard before deploying.

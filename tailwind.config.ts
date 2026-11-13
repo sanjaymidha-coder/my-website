@@ -26,10 +26,7 @@ const config: Config = {
       },
       backgroundImage: {
         grain: "url('/assets/images/img_grain.png')",
-        "grid-pattern": "url('/assets/images/grid-pattren.webp')",
         "footer-bg": "url('/assets/images/footer-bg.webp')",
-        "gradient-1": "url('/assets/images/gradient-img-1.webp')",
-        "gradient-2": "url('/assets/images/gradient-img-2.webp')",
       },
       boxShadow: {
         glow: "0 0 0 1px rgba(221,241,96,0.55), 0 0 32px -6px rgba(221,241,96,0.45)",

@@ -6,7 +6,6 @@ import { gsap, useGSAP, MQ } from "@/lib/gsap";
 import { Marquee } from "@/components/ui/Marquee";
 import { Magnetic } from "@/components/ui/Magnetic";
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { Accent } from "@/components/ui/Accent";
 import { ArrowUpRight } from "@/components/ui/Icons";
 import { TransitionLink } from "@/components/providers/PageTransition";
 import type { NavItem, ProcessStep } from "@/data/types";
@@ -98,14 +97,5 @@ export function MoonCta({ eyebrow, title, body, cta }: { eyebrow: string; title:
         </div>
       </div>
     </section>
-  );
-}
-
-/** Small pill-row of statements (services page "why" strip on mobile etc.) */
-export function Lead({ text }: { text: string }) {
-  return (
-    <p className="h-display text-[clamp(1.8rem,4vw,3.5rem)] font-medium leading-[1.1]">
-      <Accent text={text} />
-    </p>
   );
 }

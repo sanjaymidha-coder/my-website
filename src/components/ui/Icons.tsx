@@ -29,10 +29,3 @@ export const Check = ({ className = "h-4 w-4" }: P) => (
     <path d="m5 12 5 5L20 7" />
   </svg>
 );
-
-export const Video = ({ className = "h-4 w-4" }: P) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
-    <rect x="2" y="6" width="14" height="12" rx="2" />
-    <path d="m16 10 6-3v10l-6-3" />
-  </svg>
-);
