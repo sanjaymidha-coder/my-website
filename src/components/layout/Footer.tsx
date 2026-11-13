@@ -95,7 +95,7 @@ export function Footer() {
                 <ul className={`grid gap-3 overflow-hidden text-white/70 transition-all duration-500 sm:mt-5 sm:max-h-none sm:pb-0 ${isOpen ? "max-h-96 pb-5" : "max-h-0 sm:max-h-none"}`}>
                   {col.links.map((l) => (
                     <li key={l.label}>
-                      <TransitionLink href={l.href} className="transition-colors hover:text-lime">
+                      <TransitionLink href={l.href} data-cursor-small className="transition-colors hover:text-lime">
                         {l.label}
                       </TransitionLink>
                     </li>
@@ -108,10 +108,10 @@ export function Footer() {
             <span className="eyebrow">Get in Touch</span>
             <ul className="mt-5 grid gap-3 text-white/70">
               <li>
-                <a href={`mailto:${brand.email}`} className="hover:text-lime">{brand.email}</a>
+                <a href={`mailto:${brand.email}`} data-cursor-small className="hover:text-lime">{brand.email}</a>
               </li>
               <li>
-                <a href={`tel:${brand.phone.replace(/[^+\d]/g, "")}`} className="hover:text-lime">{brand.phone}</a>
+                <a href={`tel:${brand.phone.replace(/[^+\d]/g, "")}`} data-cursor-small className="hover:text-lime">{brand.phone}</a>
               </li>
             </ul>
           </div>

@@ -60,11 +60,20 @@ export function Header() {
               <TransitionLink
                 key={item.href}
                 href={item.href}
-                className="group relative overflow-hidden rounded-full px-4 py-2 text-sm text-white/75 transition-colors hover:text-white"
+                data-cursor-small
+                className="group rounded-full px-4 py-2 text-sm text-white/75 transition-colors hover:text-white"
               >
-                <span className="block transition-transform duration-300 group-hover:-translate-y-full">{item.label}</span>
-                <span aria-hidden className="absolute inset-x-4 top-full block text-lime transition-transform duration-300 group-hover:-translate-y-full">
-                  {item.label}
+                {/* Clip only the text line (not the padding) so just one label is ever visible. */}
+                <span className="relative block overflow-hidden leading-5">
+                  <span className="block transition-transform duration-300 ease-out group-hover:-translate-y-full group-focus-visible:-translate-y-full">
+                    {item.label}
+                  </span>
+                  <span
+                    aria-hidden
+                    className="absolute inset-0 block translate-y-full text-lime transition-transform duration-300 ease-out group-hover:translate-y-0 group-focus-visible:translate-y-0"
+                  >
+                    {item.label}
+                  </span>
                 </span>
               </TransitionLink>
             ))}

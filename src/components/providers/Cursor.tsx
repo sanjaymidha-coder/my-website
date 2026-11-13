@@ -3,13 +3,14 @@
 import { useEffect, useRef } from "react";
 import { gsap, MQ, prefersReducedMotion } from "@/lib/gsap";
 
-type State = "card" | "drag" | "hovering" | "text" | null;
+type State = "card" | "drag" | "hovering" | "small" | "text" | null;
 
 /**
  * Custom cursor: dot + lagging ring (mix-blend-difference).
  * States (priority card > drag > hovering > text), via event delegation:
  *  - [data-cursor="card"] (+ data-cursor-color / data-cursor-text) → "View"
  *  - [data-cursor="drag"] → "Drag"
+ *  - [data-cursor-small] (nav / footer links) → small dot only
  *  - a / button → hovering
  *  - p / li / headings → text caret
  */
@@ -33,14 +34,15 @@ export function Cursor() {
     const setState = (state: State, el?: HTMLElement | null) => {
       if (state === current && state !== "card") return;
       current = state;
-      r.classList.remove("is-card", "is-drag", "is-hovering", "is-text");
-      d.classList.remove("is-text");
+      r.classList.remove("is-card", "is-drag", "is-hovering", "is-small", "is-text");
+      d.classList.remove("is-text", "is-small");
       r.style.removeProperty("--cursor-color");
       r.style.removeProperty("--cursor-text");
       r.removeAttribute("data-label");
       if (!state) return;
       r.classList.add(`is-${state}`);
       if (state === "text") d.classList.add("is-text");
+      if (state === "small") d.classList.add("is-small");
       if (state === "card") r.setAttribute("data-label", el?.dataset.cursorLabel ?? "View");
       if (state === "drag") r.setAttribute("data-label", "Drag");
       if (el?.dataset.cursorColor) {
@@ -63,6 +65,8 @@ export function Cursor() {
         const kind = special.dataset.cursor as State;
         return setState(kind === "drag" ? "drag" : "card", special);
       }
+      // Small text links (nav, footer): just a dot so the label stays readable.
+      if (t.closest("[data-cursor-small]")) return setState("small");
       if (t.closest("a, button, [role='button'], label, select, summary")) return setState("hovering");
       if (t.closest("p, li, h1, h2, h3, h4, blockquote, input, textarea")) return setState("text");
       setState(null);

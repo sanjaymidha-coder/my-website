@@ -164,6 +164,10 @@ html.has-cursor [role="button"] {
   height: 26px;
   border-radius: 2px;
 }
+.cursor-dot.is-small {
+  width: 10px;
+  height: 10px;
+}
 .cursor-dot.is-clicking {
   width: 12px;
   height: 12px;
@@ -192,6 +196,7 @@ html.has-cursor [role="button"] {
   height: 64px;
   background: #fff;
 }
+.cursor-ring.is-small,
 .cursor-ring.is-text {
   width: 0;
   height: 0;
