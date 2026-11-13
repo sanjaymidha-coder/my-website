@@ -9,6 +9,7 @@ import { Preloader } from "@/components/providers/Preloader";
 import { Cursor } from "@/components/providers/Cursor";
 import { ParticlesLoader } from "@/components/providers/ParticlesLoader";
 import { Header } from "@/components/layout/Header";
+import { SITE_URL } from "@/lib/seo";
 import { Footer } from "@/components/layout/Footer";
 import { CookieBanner } from "@/components/layout/CookieBanner";
 
@@ -18,14 +19,18 @@ const sans = Geist({ subsets: ["latin"], variable: "--font-sans", display: "swap
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "CODELLER - Digital Product Agency",
+    default: "Codeller | UX & Web Design Agency for Startups",
     template: "%s | Codeller",
   },
   description:
-    "We help startups and growing teams turn complex ideas into clear, high-performing digital experiences — from UX strategy to production-ready development.",
-  icons: { icon: "/assets/images/logo.svg" },
+    "Codeller is a UX and web design agency helping startups and growing teams turn complex ideas into clear, high-converting websites and digital products.",
+  applicationName: "Codeller",
+  icons: { icon: "/assets/images/logo.svg", apple: "/assets/images/logo.svg" },
+  openGraph: { type: "website", locale: "en_US", siteName: "Codeller" },
+  twitter: { card: "summary_large_image" },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {
@@ -36,7 +41,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${serif.variable} ${sans.variable} ${mono.variable}`}>
+    <html lang="en-US" className={`${display.variable} ${serif.variable} ${sans.variable} ${mono.variable}`}>
       <body>
         <SmoothScroll>
           <PageTransition>

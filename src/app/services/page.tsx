@@ -6,16 +6,37 @@ import { ServicePanels } from "@/components/sections/ServicePanels";
 import { MoonCta } from "@/components/sections/Misc";
 import { servicesWhyItems } from "@/data/site";
 import { servicePanels } from "@/data/services";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { absoluteUrl, breadcrumbJsonLd, pageMetadata, SITE_URL } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: { absolute: "UX & Digital Product Design Services | Codeller" },
+export const metadata: Metadata = pageMetadata({
+  title: "UX Design & Product Design Services",
   description:
-    "Our services combine senior-level UX expertise with practical design that improves usability, engagement, and conversion.",
-};
+    "Senior UX design, design systems and ongoing product design support for startups and growing teams. Improve usability, engagement and conversion.",
+  path: "/services",
+});
+
+const servicesJsonLd = [
+  breadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Services", path: "/services" },
+  ]),
+  ...servicePanels.map((s) => ({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: s.title,
+    description: s.body,
+    serviceType: s.items.join(", "),
+    provider: { "@id": `${SITE_URL}/#business` },
+    areaServed: { "@type": "Country", name: "United States" },
+    url: absoluteUrl("/services"),
+  })),
+];
 
 export default function ServicesPage() {
   return (
     <>
+      <JsonLd data={servicesJsonLd} />
       <Hero
         compact
         eyebrow="Services"

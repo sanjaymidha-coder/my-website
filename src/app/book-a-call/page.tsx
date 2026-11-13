@@ -5,11 +5,14 @@ import { Contact } from "@/components/sections/Contact";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { brands } from "@/data/site";
 import { bookCallSteps } from "@/data/process";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: { absolute: "Book a Call | Codeller" },
-  description: "The first call is a chance to learn about your goals and see if our approach is the right fit.",
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Book a Free Design Consultation",
+  description:
+    "Book a free, no-obligation call with a senior Codeller designer. Talk through your goals and see how UX and web design can grow your business.",
+  path: "/book-a-call",
+});
 
 export default function BookACallPage() {
   return (

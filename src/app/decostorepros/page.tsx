@@ -14,8 +14,11 @@ import { decoServices, decoSkills } from "@/data/services";
 import { decoProcess, howWeWork } from "@/data/process";
 import { decoFaqs } from "@/data/faqs";
 
+// Separate business from Codeller: keep it out of Codeller's search presence.
 export const metadata: Metadata = {
   title: { absolute: "DecoStorePros - Custom Apparel Website Experts" },
+  robots: { index: false, follow: false },
+  openGraph: { siteName: "DecoStorePros", title: "DecoStorePros - Custom Apparel Website Experts" },
   description:
     "Specialising in DecoNetwork-powered stores — we design, build, and optimise custom apparel websites that look professional, convert visitors, and help your business dominate online.",
 };

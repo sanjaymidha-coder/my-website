@@ -47,7 +47,7 @@ See [`.env.example`](.env.example). Never commit real values.
 | `CONTACT_TO_EMAIL`               | server  | Where enquiries are delivered (comma-separate for several).      |
 | `CONTACT_FROM_EMAIL`             | server  | Sender on a Resend-verified domain, e.g. `Codeller <no-reply@…>` |
 | `NEXT_PUBLIC_GA_ID`              | browser | Optional GA4 ID — only loaded after analytics cookie consent.    |
-| `NEXT_PUBLIC_SITE_URL`           | both    | Optional canonical URL used for metadata.                        |
+| `NEXT_PUBLIC_SITE_URL`           | both    | Canonical site URL (default `https://codeller.com`) for canonical tags, sitemap and Open Graph. |
 
 ## Project structure
 

@@ -141,7 +141,7 @@ export function TransitionLink({ href, onClick, children, ...rest }: TLinkProps)
 
   if (isExternal) {
     return (
-      <a href={href} onClick={onClick} {...rest}>
+      <a href={href} onClick={onClick} {...(/^https?:/.test(href) ? { target: "_blank", rel: "noopener noreferrer" } : {})} {...rest}>
         {children}
       </a>
     );
