@@ -92,8 +92,15 @@ export function Particles() {
       raf = requestAnimationFrame(step);
     };
 
-    resize();
-    raf = requestAnimationFrame(step);
+    // Defer until the browser is idle so it never competes with first paint.
+    let idle = 0;
+    const start = () => {
+      resize();
+      raf = requestAnimationFrame(step);
+    };
+    const w8 = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number; cancelIdleCallback?: (id: number) => void };
+    if (w8.requestIdleCallback) idle = w8.requestIdleCallback(start, { timeout: 1500 });
+    else idle = window.setTimeout(start, 600);
 
     const onResize = () => resize();
     // Pause while the tab is hidden.
@@ -104,6 +111,8 @@ export function Particles() {
     window.addEventListener("resize", onResize);
     document.addEventListener("visibilitychange", onVisibility);
     return () => {
+      if (w8.cancelIdleCallback) w8.cancelIdleCallback(idle);
+      else clearTimeout(idle);
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);
       document.removeEventListener("visibilitychange", onVisibility);

@@ -114,6 +114,23 @@ html.lenis body {
   }
 }
 
+/* Hero headline: words rise in from a visible state, starting with the first paint. */
+.hero-word {
+  display: inline-block;
+  animation: hero-word 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 35ms + 80ms);
+}
+@keyframes hero-word {
+  from {
+    opacity: 0.25;
+    transform: translateY(0.3em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Grain overlay over the whole site */
 .grain {
   pointer-events: none;

@@ -4,45 +4,52 @@ import { useRef, useState } from "react";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
 import { markLoaded } from "@/lib/loaded";
 
-/** Short 0 → 100 counter, then an upward wipe that reveals the site. */
+const SEEN_KEY = "codeller-intro-seen";
+
+/**
+ * Non-blocking intro: a thin lime progress bar with a small 0 → 100 counter.
+ * It never covers the page (so the hero headline is painted immediately — good for LCP),
+ * runs once per browser session, and is skipped for reduced motion.
+ */
 export function Preloader() {
   const root = useRef<HTMLDivElement>(null);
   const [done, setDone] = useState(false);
 
   useGSAP(
     () => {
+      // Intro animations may start right away; nothing waits on this bar.
+      markLoaded();
       const el = root.current;
-      if (!el) return;
-      if (prefersReducedMotion()) {
-        markLoaded();
+      let seen = false;
+      try {
+        seen = sessionStorage.getItem(SEEN_KEY) === "1";
+        sessionStorage.setItem(SEEN_KEY, "1");
+      } catch {
+        /* storage unavailable */
+      }
+      if (!el || seen || prefersReducedMotion()) {
         setDone(true);
         return;
       }
 
       const counter = { v: 0 };
       const num = el.querySelector<HTMLElement>("[data-count]");
-      const bar = el.querySelector<HTMLElement>("[data-bar]");
-      document.documentElement.classList.add("is-loading");
-
       gsap
-        .timeline({
-          onComplete: () => {
-            document.documentElement.classList.remove("is-loading");
-            setDone(true);
+        .timeline({ onComplete: () => setDone(true) })
+        .to("[data-bar]", { scaleX: 1, duration: 0.9, ease: "power2.inOut" }, 0)
+        .to(
+          counter,
+          {
+            v: 100,
+            duration: 0.9,
+            ease: "power2.inOut",
+            onUpdate: () => {
+              if (num) num.textContent = String(Math.round(counter.v)).padStart(3, "0");
+            },
           },
-        })
-        .to(counter, {
-          v: 100,
-          duration: 1.4,
-          ease: "power2.inOut",
-          onUpdate: () => {
-            if (num) num.textContent = String(Math.round(counter.v)).padStart(3, "0");
-          },
-        })
-        .to(bar, { scaleX: 1, duration: 1.4, ease: "power2.inOut" }, 0)
-        .to(el.querySelectorAll("[data-fade]"), { yPercent: -120, opacity: 0, duration: 0.5, ease: "power3.in" })
-        .add(markLoaded, "-=0.1")
-        .to(el, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.9, ease: "power4.inOut" }, "<");
+          0,
+        )
+        .to(el, { autoAlpha: 0, duration: 0.4, ease: "power2.out" });
     },
     { scope: root },
   );
@@ -50,35 +57,15 @@ export function Preloader() {
   if (done) return null;
 
   return (
-    <div
-      ref={root}
-      className="preloader fixed inset-0 z-[9995] flex flex-col justify-between bg-navy p-6 md:p-10"
-      style={{ clipPath: "inset(0% 0% 0% 0%)" }}
-      aria-hidden
-    >
-      <div className="overflow-hidden">
-        <p data-fade className="eyebrow">
-          Codeller — digital product studio
-        </p>
+    <div ref={root} aria-hidden className="pointer-events-none fixed inset-x-0 top-0 z-[9995]">
+      <div className="h-[3px] w-full bg-white/10">
+        <div data-bar className="h-full origin-left scale-x-0 bg-lime" />
       </div>
-      <div className="flex items-end justify-between gap-6">
-        <div className="overflow-hidden">
-          <span
-            data-count
-            data-fade
-            className="block font-mono text-[22vw] leading-[0.8] tracking-tighter text-lime md:text-[14vw]"
-          >
-            000
-          </span>
-        </div>
-        <div className="mb-4 hidden w-1/3 md:block">
-          <div className="h-px w-full bg-white/15">
-            <div data-bar className="h-px origin-left scale-x-0 bg-lime" />
-          </div>
-        </div>
-      </div>
+      <span data-count className="absolute right-4 top-3 font-mono text-[11px] tracking-widest text-lime md:right-6">
+        000
+      </span>
       <noscript>
-        <style>{`.preloader{display:none!important}`}</style>
+        <style>{`[data-bar]{transform:scaleX(1)}`}</style>
       </noscript>
     </div>
   );

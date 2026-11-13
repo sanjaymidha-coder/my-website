@@ -5,29 +5,36 @@ import { gsap, useGSAP, ScrollTrigger, MQ } from "@/lib/gsap";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import type { ProcessStep } from "@/data/types";
 
-/** Desktop-only ambient video (the 7MB file never loads on mobile). */
+/**
+ * Desktop-only ambient video. The 7MB file is never fetched on mobile, and on desktop
+ * only once its section is about to scroll into view (well after first paint).
+ */
 function AmbientVideo() {
+  const ref = useRef<HTMLDivElement>(null);
   const [show, setShow] = useState(false);
   useEffect(() => {
-    const mq = window.matchMedia(MQ.desktop);
-    setShow(mq.matches);
-    const on = () => setShow(mq.matches);
-    mq.addEventListener("change", on);
-    return () => mq.removeEventListener("change", on);
+    const el = ref.current;
+    if (!el || !window.matchMedia(MQ.desktop).matches) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShow(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "200px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
-  if (!show) return null;
   return (
-    <video
-      className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover opacity-[0.12] mix-blend-screen"
-      autoPlay
-      muted
-      loop
-      playsInline
-      preload="metadata"
-      aria-hidden
-    >
-      <source src="/assets/images/artistic-video.mp4" type="video/mp4" />
-    </video>
+    <div ref={ref} aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+      {show && (
+        <video className="h-full w-full object-cover opacity-[0.12] mix-blend-screen" autoPlay muted loop playsInline preload="none">
+          <source src="/assets/images/artistic-video.mp4" type="video/mp4" />
+        </video>
+      )}
+    </div>
   );
 }
 
@@ -107,19 +114,19 @@ export function Process({ id, eyebrow, title, body, steps }: { id?: string; eyeb
             <li
               key={s.title}
               data-step
-              className="group relative pb-16 pl-16 last:pb-0 md:pb-24 [&.is-active_.dot]:bg-lime [&.is-active_.dot]:text-black [&.is-active_.dot]:shadow-glow [&.is-active_.body]:opacity-100 [&.is-done_.dot]:bg-lime/80 [&.is-done_.dot]:text-black [&.is-done_.body]:opacity-60"
+              className="group relative pb-16 pl-16 last:pb-0 md:pb-24 [&.is-active_.dot]:bg-lime [&.is-active_.dot]:text-black [&.is-active_.dot]:shadow-glow [&.is-active_.body]:opacity-100 [&.is-done_.dot]:bg-lime/80 [&.is-done_.dot]:text-black [&.is-done_.body]:opacity-80"
             >
               <span className="dot absolute left-0 top-0 grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-[#0d0d10] font-mono text-sm transition-all duration-500">
                 {i + 1}
               </span>
-              <div className="body opacity-35 transition-opacity duration-500">
+              <div className="body opacity-70 transition-opacity duration-500">
                 <h3 className="mb-3 flex flex-wrap items-center gap-3 text-2xl font-semibold md:text-4xl">
                   {s.title}
                   {s.badge && (
                     <span className="rounded-full border border-pink/40 px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-pink">{s.badge}</span>
                   )}
                 </h3>
-                <p className="max-w-md text-white/65">{s.description}</p>
+                <p className="max-w-md text-white/80">{s.description}</p>
               </div>
             </li>
           ))}

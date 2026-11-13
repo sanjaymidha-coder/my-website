@@ -1,9 +1,9 @@
 "use client";
 
 import { useRef } from "react";
-import { gsap, useGSAP, SplitText, MQ } from "@/lib/gsap";
+import { gsap, useGSAP, MQ } from "@/lib/gsap";
 import { useSiteLoaded } from "@/lib/loaded";
-import { Accent } from "@/components/ui/Accent";
+
 import { Magnetic } from "@/components/ui/Magnetic";
 import { CountUp } from "@/components/ui/CountUp";
 import { ArrowUpRight } from "@/components/ui/Icons";
@@ -22,7 +22,39 @@ interface Props {
   children?: React.ReactNode;
 }
 
-/** Grainy gradient-mesh hero with SplitText headline reveal. */
+/**
+ * Headline split into words at render time (server HTML), each rising in with a short,
+ * staggered CSS animation that starts from a visible state. Supports *accent* words.
+ */
+function HeroWords({ text }: { text: string }) {
+  let i = 0;
+  return (
+    <>
+      {text.split(/(\*[^*]+\*)/g).filter(Boolean).map((part, pi) => {
+        const accent = part.startsWith("*") && part.endsWith("*");
+        const words = (accent ? part.slice(1, -1) : part).split(/(\s+)/);
+        const nodes = words.map((w, wi) =>
+          /^\s+$/.test(w) || !w ? (
+            w
+          ) : (
+            <span key={wi} className="hero-word" style={{ ["--i" as string]: i++ }}>
+              {w}
+            </span>
+          ),
+        );
+        return accent ? (
+          <em key={pi} className="accent">
+            {nodes}
+          </em>
+        ) : (
+          <span key={pi}>{nodes}</span>
+        );
+      })}
+    </>
+  );
+}
+
+/** Grainy gradient-mesh hero with a CSS word-by-word headline reveal. */
 export function Hero({ eyebrow, title, body, primary, secondary, stats, compact = false, children }: Props) {
   const root = useRef<HTMLElement>(null);
   const loaded = useSiteLoaded();
@@ -64,23 +96,14 @@ export function Hero({ eyebrow, title, body, primary, secondary, stats, compact 
     { scope: root },
   );
 
-  // Headline + supporting copy intro, after the preloader.
+  // Supporting copy intro. The headline itself is animated with pure CSS (see HeroWords)
+  // so it is painted with the very first HTML — no JS re-render, good for LCP.
   useGSAP(
     () => {
       if (!loaded) return;
       const mm = gsap.matchMedia();
       mm.add(MQ.motion, () => {
-        const h1 = root.current?.querySelector<HTMLElement>("h1");
-        if (!h1) return;
-        const split = SplitText.create(h1, {
-          type: "lines,words",
-          mask: "lines",
-          autoSplit: true,
-          onSplit: (self) =>
-            gsap.from(self.words, { yPercent: 115, rotate: 4, duration: 1.2, stagger: 0.045, ease: "power4.out" }),
-        });
-        gsap.from("[data-hero-fade]", { y: 30, opacity: 0, duration: 1, stagger: 0.1, delay: 0.45 });
-        return () => split.revert();
+        gsap.from("[data-hero-fade]", { y: 20, opacity: 0.25, duration: 0.6, stagger: 0.06, delay: 0.15 });
       });
       return () => mm.revert();
     },
@@ -116,7 +139,7 @@ export function Hero({ eyebrow, title, body, primary, secondary, stats, compact 
             compact ? "text-[clamp(2.6rem,7vw,6.5rem)]" : "text-[clamp(3rem,10vw,10.5rem)]"
           } leading-[0.92]`}
         >
-          <Accent text={title} />
+          <HeroWords text={title} />
         </h1>
 
         <div className="mt-10 grid gap-10 md:mt-14 lg:grid-cols-12 lg:items-end">
