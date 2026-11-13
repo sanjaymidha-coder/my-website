@@ -90,14 +90,14 @@ export function Hero({ eyebrow, title, body, primary, secondary, stats, compact 
   return (
     <section ref={root} className={`relative isolate overflow-hidden ${compact ? "pb-16 pt-40 md:pt-48" : "min-h-[100svh] pb-16 pt-36 md:pt-44"}`}>
       {/* Gradient mesh */}
-      <div aria-hidden className="absolute inset-0 -z-10">
+      <div aria-hidden className="absolute inset-0 -z-10 opacity-90">
         <div data-mesh className="absolute inset-[-15%]">
           <div data-blob className="absolute left-[8%] top-[10%] h-[42vw] w-[42vw] rounded-full bg-[#2536DE]/60 blur-[100px]" />
           <div data-blob className="absolute right-[2%] top-[0%] h-[36vw] w-[36vw] rounded-full bg-cyan/50 blur-[110px]" />
           <div data-blob className="absolute bottom-[8%] left-[30%] h-[30vw] w-[30vw] rounded-full bg-lime/35 blur-[110px]" />
           <div data-blob className="absolute bottom-[18%] right-[18%] h-[22vw] w-[22vw] rounded-full bg-pink/30 blur-[100px]" />
         </div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,var(--bg)_88%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(5,5,5,0.55)_88%)]" />
         <div className="absolute inset-0 bg-grain bg-[length:160px] opacity-[0.18] mix-blend-overlay" />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[var(--bg)]" />
       </div>

@@ -7,6 +7,7 @@ import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { PageTransition } from "@/components/providers/PageTransition";
 import { Preloader } from "@/components/providers/Preloader";
 import { Cursor } from "@/components/providers/Cursor";
+import { ParticlesLoader } from "@/components/providers/ParticlesLoader";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CookieBanner } from "@/components/layout/CookieBanner";
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <SmoothScroll>
           <PageTransition>
+            <ParticlesLoader />
             <Preloader />
             <Header />
             <main id="main-content">{children}</main>

@@ -22,7 +22,9 @@
     text-rendering: optimizeLegibility;
   }
   body {
-    @apply font-sans bg-[var(--bg)] text-[var(--fg)] overflow-x-hidden;
+    /* No body background: the html background shows through, so the fixed
+       particle canvas (z -10) can sit behind the page content. */
+    @apply font-sans text-[var(--fg)] overflow-x-hidden;
   }
   h1,
   h2,
