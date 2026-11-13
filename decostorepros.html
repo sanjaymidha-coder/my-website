@@ -1,0 +1,2469 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta
+        content="DecoStorePros builds custom apparel websites on DecoNetwork that compete with Custom Ink. eCommerce setup, integrations, SEO and more — built to dominate online."
+        name="description" />
+    <meta content="#0E1414" name="theme-color" />
+    <title>DecoStorePros - Custom Apparel Website Experts</title>
+    <link href="./assets/fontawesome/css/all.min.css" rel="stylesheet" />
+    <link href="./src/slick/slick-theme.min.css" rel="stylesheet" />
+    <link href="./src/slick/slick.min.css" rel="stylesheet" />
+    <link href="./src/swiper/swiper-bundle.min.css" rel="stylesheet" />
+    <link href="./dist/output.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+
+    <!-- Preload critical hero image -->
+    <link as="image" href="assets/images/hero-img.svg" rel="preload" />
+
+    <style>
+        /* ── Project Modal ── */
+        .project-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .project-modal.is-open { opacity: 1; pointer-events: all; }
+        .modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.82);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .modal-card {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 900px;
+            max-height: 82vh;
+            overflow-y: auto;
+            background: #101010;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 20px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.75);
+            transform: scale(0.94) translateY(16px);
+            transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.08) transparent;
+        }
+        .modal-card::-webkit-scrollbar { width: 4px; }
+        .modal-card::-webkit-scrollbar-track { background: transparent; }
+        .modal-card::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+        .project-modal.is-open .modal-card { transform: scale(1) translateY(0); }
+
+        /* Hero image */
+        .modal-img-wrap {
+            width: 100%;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+            background: #1a1a1a;
+            border-radius: 20px 20px 0 0;
+        }
+        .modal-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+
+        /* Body */
+        .modal-body { padding: 2rem 2.5rem 2.5rem; }
+
+        /* Header row: tags + CTA */
+        .modal-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            padding-bottom: 1.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+        .modal-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+        .modal-tag {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.7rem;
+            border-radius: 9999px;
+            background: rgba(221,241,96,0.1);
+            color: #DDF160;
+            border: 1px solid rgba(221,241,96,0.2);
+        }
+        .modal-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #DDF160;
+            color: #000;
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 0.55rem 1.1rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background 0.2s, gap 0.2s;
+        }
+        .modal-cta:hover { background: #eaf87e; gap: 0.75rem; }
+
+        /* About section — 2-col grid */
+        .modal-about {
+            display: grid;
+            grid-template-columns: 190px 1fr;
+            gap: 1rem 2rem;
+            padding: 1.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+        .modal-section-label {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+        .modal-section-num {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #DDF160;
+            letter-spacing: 0.02em;
+        }
+        .modal-section-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #DDF160;
+            line-height: 1.3;
+        }
+        .modal-about-text {
+            color: rgba(255,255,255,0.68);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        /* Info table */
+        .modal-table { border-bottom: 1px solid rgba(255,255,255,0.07); }
+        .modal-table-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 1rem;
+            padding: 0.9rem 0;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            align-items: start;
+        }
+        .modal-table-key { font-weight: 700; color: rgba(255,255,255,0.9); font-size: 0.875rem; }
+        .modal-table-val { color: rgba(255,255,255,0.5); font-size: 0.875rem; line-height: 1.6; }
+
+        /* Project Details */
+        .modal-details { padding-top: 1.75rem; }
+        .modal-details-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #DDF160;
+            margin: 0 0 1rem 0;
+            letter-spacing: 0.03em;
+        }
+        .modal-details-list {
+            margin: 0; padding: 0; list-style: none;
+            display: flex; flex-direction: column; gap: 0.7rem;
+            counter-reset: detail;
+        }
+        .modal-details-list li {
+            display: flex;
+            gap: 0.75rem;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.875rem;
+            line-height: 1.65;
+            counter-increment: detail;
+        }
+        .modal-details-list li::before {
+            content: counter(detail) ".";
+            color: rgba(255,255,255,0.25);
+            font-weight: 700;
+            min-width: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        /* Close button */
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            z-index: 20;
+            width: 2.25rem; height: 2.25rem;
+            border-radius: 9999px;
+            background: rgba(0,0,0,0.45);
+            border: 1px solid rgba(255,255,255,0.14);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.85rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        .modal-close-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .modal-body { padding: 1.25rem 1.25rem 2rem; }
+            .modal-about { grid-template-columns: 1fr; gap: 0.5rem; }
+            .modal-table-row { grid-template-columns: 90px 1fr; }
+            .modal-header-row { flex-direction: column; align-items: flex-start; }
+        }
+
+        /* Work card button reset */
+        .work-card-btn {
+            display: flex; flex-direction: column;
+            background: none; border: none; padding: 0;
+            cursor: pointer; width: 100%;
+            text-align: left; height: 100%;
+        }
+
+        /* ── 3D Tilt ── */
+        .tilt-card { perspective: 1000px; }
+        .tilt-inner {
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+        .tilt-shine {
+            position: absolute;
+            inset: 0;
+            z-index: 25;
+            opacity: 0;
+            pointer-events: none;
+            border-radius: inherit;
+            mix-blend-mode: screen;
+        }
+
+        /* ── Custom Cursor ── */
+        body, * { cursor: none !important; }
+
+        #cursorDot {
+            position: fixed;
+            top: 0; left: 0;
+            width: 7px; height: 7px;
+            background: #DDF160;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s, transform 0.15s;
+            will-change: left, top;
+        }
+        #cursorDot.is-clicking {
+            transform: translate(-50%, -50%) scale(0.6);
+        }
+
+        #cursorRing {
+            position: fixed;
+            top: 0; left: 0;
+            width: 36px; height: 36px;
+            border: 1.5px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition:
+                width  0.35s cubic-bezier(0.23, 1, 0.32, 1),
+                height 0.35s cubic-bezier(0.23, 1, 0.32, 1),
+                background 0.35s,
+                border-color 0.35s,
+                opacity 0.3s;
+            will-change: left, top;
+        }
+
+        /* hovering a link or button */
+        #cursorRing.is-hovering {
+            width: 54px; height: 54px;
+            border-color: #DDF160;
+            background: rgba(221, 241, 96, 0.08);
+        }
+
+        /* hovering a portfolio card — brand colour via CSS var */
+        #cursorRing.is-card {
+            width: 80px; height: 80px;
+            background: var(--cursor-color, #DDF160);
+            border-color: var(--cursor-color, #DDF160);
+        }
+
+        /* swiper drag zone */
+        #cursorRing.is-drag {
+            width: 72px; height: 72px;
+            background: #DDF160;
+            border-color: #DDF160;
+        }
+
+        /* text beam — dot collapses to a thin vertical line */
+        #cursorDot.is-text {
+            width: 2px;
+            height: 18px;
+            border-radius: 1px;
+            background: rgba(255, 255, 255, 0.7);
+        }
+        #cursorRing.is-text {
+            width: 0px; height: 0px;
+            opacity: 0;
+            border-color: transparent;
+        }
+
+        /* label inside ring (View / Drag) */
+        #cursorRing::after {
+            content: attr(data-label);
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            font-size: 0.6rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--cursor-text, #000);
+            opacity: 0;
+            transition: opacity 0.2s 0.1s;
+        }
+        #cursorRing.is-card::after,
+        #cursorRing.is-drag::after  { opacity: 1; }
+
+        /* Touch / mobile — restore default cursor */
+        @media (hover: none) {
+            body, * { cursor: auto !important; }
+            #cursorDot, #cursorRing { display: none; }
+        }
+    </style>
+</head>
+
+
+<body class="bg-black">
+    
+
+    <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 bg-white text-dark px-3 py-2 rounded"
+        href="#main-content">
+        Skip
+        to main content
+    </a>
+    <!-- Screen reader announcements -->
+    <div aria-atomic="true" aria-live="polite" class="sr-only" id="sr-announcements">
+    </div>
+
+    <!-- Header -->
+    <header class="text-white flex items-center justify-center" id="site-header" role="banner">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between max-md:flex-row-reverse items-center gap-2">
+                <a aria-controls="mobile-offcanvas" aria-expanded="false" aria-label="Open menu"
+                    class="md:hidden inline-flex items-center justify-center w-10 h-10 text-white focus:outline-none"
+                    href="#" id="mobile-menu-button" role="button">
+                    <span class="relative block w-6 h-5">
+                        <span class="hamburger-line top-0"></span>
+                        <span class="hamburger-line top-1/2 -translate-y-1/2"></span>
+                        <span class="hamburger-line bottom-0"></span>
+                    </span>
+                </a>
+
+
+
+                <div class="max-md:relative max-md:top-[3px]" aria-label="DecoStorePros logo" role="img">
+                    <a class="inline-block" href="decostorepros.html">
+                        <img alt="DecoStorePros logo" class="lg:max-w-[183px] md:max-w-[120px] max-w-[140px]" height="34"
+                            src="./assets/images/logo.svg" width="183">
+                    </a>
+                </div>
+                <nav class="hidden md:flex lg:text-base text-sm max-lg:flex-1 max-lg:justify-between">
+                    <a class="hover:text-green transition-colors focus:text-green focus:outline-none focus:ring-offset-dark-blue rounded-xs px-4 md:px-2 lg:px-4 xl:px-6 py-1"
+                        href="#why-us">
+                        Why Us
+                    </a>
+                    <a class="hover:text-green transition-colors focus:text-green focus:outline-none focus:ring-offset-dark-blue rounded-xs px-4 md:px-2 lg:px-4 xl:px-6 py-1"
+                        href="#services">
+                        Services
+                    </a>
+                    <a class="hover:text-green transition-colors focus:text-green focus:outline-none focus:ring-offset-dark-blue rounded-xs px-4 md:px-2 lg:px-4 xl:px-6 py-1"
+                        href="#process">
+                        Process
+                    </a>
+                    <a class="hover:text-green transition-colors focus:text-green focus:outline-none focus:ring-offset-dark-blue rounded-xs px-4 md:px-2 lg:px-4 xl:px-6 py-1"
+                        href="#results">
+                        Results
+                    </a>
+                    <a class="hover:text-green transition-colors focus:text-green focus:outline-none focus:ring-offset-dark-blue rounded-xs px-4 md:px-2 lg:px-4 xl:px-6 py-1"
+                        href="#faq">
+                        FAQ
+                    </a>
+                    <a class="hover:text-green transition-colors focus:text-green focus:outline-none focus:ring-offset-dark-blue rounded-xs px-4 md:px-2 lg:px-4 xl:px-6 py-1"
+                        href="#contact">
+                        Contact Us
+                    </a>
+                </nav>
+                <div class="group text-sm flex items-center gap-3 max-md:ml-auto max-md:hidden">
+                    <a href="#contact" data-magnetic data-magnetic-strength="0.2" class="relative z-10 inline-flex items-center justify-center gap-[10px]
+                               pl-6 pr-1 py-1
+                               rounded-full
+                               bg-white
+                               text-black text-sm font-semibold
+                               transition duration-150 ease-out
+                               hover:brightness-110
+                               focus:outline-none focus:ring-2 focus:ring-[#000]/70" role="button">
+                        <span>Get Started</span>
+                        <span class="relative h-10 w-10 rounded-full bg-black overflow-hidden">
+                            <!-- Icon track (same icon twice, scrolls up) -->
+                            <span class="absolute left-0 top-0 w-full transition-transform duration-200 ease-out
+                                   group-hover:-translate-y-10">
+                                <!-- Frame 1 -->
+                                <span class="flex h-10 w-10 items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"
+                                        fill="none">
+                                        <path
+                                            d="M11.3 12C9.91111 12 8.53889 11.6972 7.18333 11.0917C5.82778 10.4861 4.59444 9.62778 3.48333 8.51667C2.37222 7.40556 1.51389 6.17222 0.908333 4.81667C0.302778 3.46111 0 2.08889 0 0.7C0 0.5 0.0666667 0.333333 0.2 0.2C0.333333 0.0666667 0.5 0 0.7 0H3.4C3.55556 0 3.69444 0.0527778 3.81667 0.158333C3.93889 0.263889 4.01111 0.388889 4.03333 0.533333L4.46667 2.86667C4.48889 3.04444 4.48333 3.19444 4.45 3.31667C4.41667 3.43889 4.35556 3.54444 4.26667 3.63333L2.65 5.26667C2.87222 5.67778 3.13611 6.075 3.44167 6.45833C3.74722 6.84167 4.08333 7.21111 4.45 7.56667C4.79444 7.91111 5.15556 8.23056 5.53333 8.525C5.91111 8.81944 6.31111 9.08889 6.73333 9.33333L8.3 7.76667C8.4 7.66667 8.53056 7.59167 8.69167 7.54167C8.85278 7.49167 9.01111 7.47778 9.16667 7.5L11.4667 7.96667C11.6222 8.01111 11.75 8.09167 11.85 8.20833C11.95 8.325 12 8.45556 12 8.6V11.3C12 11.5 11.9333 11.6667 11.8 11.8C11.6667 11.9333 11.5 12 11.3 12Z"
+                                            fill="#fff"></path>
+                                    </svg>
+                                </span>
+                                <!-- Frame 2 (same icon) -->
+                                <span class="flex h-10 w-10 items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"
+                                        fill="none">
+                                        <path
+                                            d="M11.3 12C9.91111 12 8.53889 11.6972 7.18333 11.0917C5.82778 10.4861 4.59444 9.62778 3.48333 8.51667C2.37222 7.40556 1.51389 6.17222 0.908333 4.81667C0.302778 3.46111 0 2.08889 0 0.7C0 0.5 0.0666667 0.333333 0.2 0.2C0.333333 0.0666667 0.5 0 0.7 0H3.4C3.55556 0 3.69444 0.0527778 3.81667 0.158333C3.93889 0.263889 4.01111 0.388889 4.03333 0.533333L4.46667 2.86667C4.48889 3.04444 4.48333 3.19444 4.45 3.31667C4.41667 3.43889 4.35556 3.54444 4.26667 3.63333L2.65 5.26667C2.87222 5.67778 3.13611 6.075 3.44167 6.45833C3.74722 6.84167 4.08333 7.21111 4.45 7.56667C4.79444 7.91111 5.15556 8.23056 5.53333 8.525C5.91111 8.81944 6.31111 9.08889 6.73333 9.33333L8.3 7.76667C8.4 7.66667 8.53056 7.59167 8.69167 7.54167C8.85278 7.49167 9.01111 7.47778 9.16667 7.5L11.4667 7.96667C11.6222 8.01111 11.75 8.09167 11.85 8.20833C11.95 8.325 12 8.45556 12 8.6V11.3C12 11.5 11.9333 11.6667 11.8 11.8C11.6667 11.9333 11.5 12 11.3 12Z"
+                                            fill="#fff"></path>
+                                    </svg>
+                                </span>
+                            </span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main id="main-content" role="main">
+        <section class="text-white pt-20">
+            <div class="container mx-auto px-4 text-center relative z-50">
+                <h1
+                    class="text-center text-[30px] sm:text-[32px] md:text-[52px] xl:text-[64px] font-bold mb-6 leading-[1.2] max-w-[1000px] mx-auto">
+                    We Build Custom Apparel Websites That Compete With Custom Ink.
+                </h1>
+                <p class="text-base text-white/70 md:text-lg mb-8 mx-auto max-w-[712px]">
+                    Specialising in DecoNetwork-powered stores — we design, build, and optimise custom apparel websites
+                    that look professional, convert visitors, and help your business dominate online.
+                </p>
+
+                <!-- Stats -->
+                <div class="flex items-center justify-center gap-8 md:gap-16 mt-8 mb-10">
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-extrabold text-green">80+</div>
+                        <div class="text-white/60 text-sm mt-1">Stores Built</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-extrabold text-green">4.8×</div>
+                        <div class="text-white/60 text-sm mt-1">Avg. Revenue Growth</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-extrabold text-green">90+</div>
+                        <div class="text-white/60 text-sm mt-1">Happy Clients</div>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex justify-center gap-4 flex-wrap">
+                    <a href="#contact" data-magnetic data-magnetic-strength="0.25"
+                        class="group inline-flex items-center gap-4 rounded-full bg-green text-dark pl-8 pr-2 py-2 font-bold capitalize shadow-lg transition-all duration-300 hover:bg-transparent hover:text-green hover:border-green border-green border focus:outline-none">
+                        <span>Get Your Free Audit</span>
+                        <span
+                            class="flex h-12 w-12 items-center justify-center rounded-full text-green bg-[#201F1E] transition duration-300 group-hover:bg-green group-hover:text-dark">
+                            <i class="fa-solid fa-arrow-up"></i>
+                        </span>
+                    </a>
+                    <a href="#results" data-magnetic data-magnetic-strength="0.25"
+                        class="group inline-flex items-center gap-4 rounded-full bg-transparent text-white pl-8 pr-2 py-2 font-bold capitalize shadow-lg transition-all duration-300 hover:bg-white/10 border-white/30 border focus:outline-none">
+                        <span>View Our Work</span>
+                        <span
+                            class="flex h-12 w-12 items-center justify-center rounded-full text-white bg-white/10 transition duration-300 group-hover:bg-white group-hover:text-dark">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </a>
+                </div>
+
+            </div>
+            <p class="text-sm text-white/70 mb-4 mt-[96px] text-center">
+                Trusted by apparel businesses across the globe
+            </p>
+            <!-- Client Logos -->
+            <!-- Mobile slider -->
+            <div class="client-logos-slider md:hidden overflow-hidden">
+                <div class="px-4">
+                    <img alt="Costsaver company logo" decoding="async" loading="lazy" src="assets/images/costsaver.svg"
+                        width="129" height="20" />
+                </div>
+                <div class="px-4">
+                    <img alt="trafalgar company logo" decoding="async" loading="lazy" src="assets/images/trafalgar.svg"
+                        width="102" height="28" />
+                </div>
+                <div class="px-4">
+                    <img alt="FJ company logo" class="mx-auto" decoding="async" height="40" loading="lazy"
+                        src="assets/images/fj.svg" width="75" height="25" />
+                </div>
+                <div class="px-4">
+                    <img alt="Midland company logo" class="mx-auto" decoding="async" height="40" loading="lazy"
+                        src="assets/images/midland.svg" width="110" height="32" />
+                </div>
+                <div class="px-4">
+                    <img alt="Mxology company logo" class="mx-auto" decoding="async" height="40" loading="lazy"
+                        src="assets/images/mxology.svg" width="143" height="31" />
+                </div>
+                <div class="px-4">
+                    <img alt="Revo company logo" class="mx-auto" decoding="async" height="40" loading="lazy"
+                        src="assets/images/revo.svg" width="95" height="21" />
+                </div>
+            </div>
+            <!-- Desktop static logos -->
+            <div aria-label="Client logos" class="hidden md:flex justify-center items-center md:gap-6 lg:gap-12 px-6">
+                <img class="max-lg:w-full" alt="Costsaver company logo" decoding="async" loading="lazy"
+                    src="assets/images/costsaver.svg" width="129" height="20" />
+                <img alt="trafalgar company logo" decoding="async" loading="lazy" src="assets/images/trafalgar.svg"
+                    width="102" height="28" />
+                <img alt="FJ company logo" decoding="async" loading="lazy" src="assets/images/fj.svg" width="75"
+                    height="25" />
+                <img alt="Midland company logo" decoding="async" loading="lazy" src="assets/images/midland.svg"
+                    width="110" height="32" />
+                <img alt="Mxology company logo" decoding="async" loading="lazy" src="assets/images/mxology.svg"
+                    width="143" height="31" />
+                <img alt="Revo company logo" decoding="async" loading="lazy" src="assets/images/revo.svg" width="95"
+                    height="21" />
+
+            </div>
+        </section>
+
+
+
+        <!-- Portfolio Section -->
+        <section aria-labelledby="portfolio-heading" class="relative text-white pb-12 md:pb-24 mt-8 md:mt-[70px]" id="results">
+            <div class="container mx-auto px-4">
+                    <h2 id="portfolio-heading" class="font-extrabold mb-4">
+                        Real Clients. <span class="font-light">Real Results.</span>
+                    </h2>
+                    <p class="text-white/60 text-base max-w-[600px] mb-8">Custom apparel stores we've designed and built — each one built to sell.</p>
+            </div>
+            <div class="swiper myWorkSwiper !overflow-visible px-6">
+                <div class="swiper-wrapper">
+
+                    <!-- fatjoe -->
+                    <div class="swiper-slide px-2 flex !h-auto">
+                        <button type="button" class="work-card-btn flex flex-col group tilt-card"
+                            data-project="jannah"
+                            data-cursor-color="#1a4731" data-cursor-text="#DDF160">
+                            <div class="relative overflow-hidden rounded-2xl aspect-3/2 h-full tilt-inner">
+
+                                <img src="./assets/images/work/jannah-thumbnail.webp" alt="fatjoe"
+                                    class="w-full h-full object-cover rounded-lg transition-transform duration-500 ease-out group-hover:scale-[1.05]"
+                                    loading="lazy" decoding="async">
+
+                                <div class="text-white absolute inset-x-0 bottom-0 p-4 z-20">
+                                    <h3 class="text-lg xl:text-xl font-medium flex items-center gap-2">
+                                        Jannah
+                                        <span
+                                            class="opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+                                            <i class="fa-solid fa-arrow-right"></i>
+                                        </span>
+                                    </h3>
+                                </div>
+
+                                <div class="absolute inset-0 rounded-lg z-10
+                  bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.85)_100%)]">
+                                </div>
+
+                                <div class="absolute inset-0 rounded-lg z-10
+                  opacity-0 transition-opacity duration-500
+                  bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,1)_100%)]
+                  group-hover:opacity-70">
+                                </div>
+
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Trafalgar -->
+                    <div class="swiper-slide px-2 flex !h-auto">
+                        <button type="button" class="work-card-btn flex flex-col group tilt-card"
+                            data-project="gisteo"
+                            data-cursor-color="#16a34a" data-cursor-text="#fff">
+                            <div class="relative overflow-hidden rounded-2xl aspect-3/2 h-full tilt-inner">
+
+                                <img src="./assets/images/work/gisteo-thumbnail.webp" alt="Trafalgar Tours"
+                                    class="w-full h-full object-cover rounded-lg transition-transform duration-500 ease-out group-hover:scale-[1.05]"
+                                    loading="lazy" decoding="async">
+
+                                <div class="text-white absolute inset-x-0 bottom-0 p-4 z-20">
+                                    <h3 class="text-lg xl:text-xl font-medium flex items-center gap-2">
+                                        Gisteo
+                                        <span
+                                            class="opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+                                            <i class="fa-solid fa-arrow-right"></i>
+                                        </span>
+                                    </h3>
+                                </div>
+
+                                <div class="absolute inset-0 rounded-lg z-10
+                  bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.85)_100%)]">
+                                </div>
+
+                                <div class="absolute inset-0 rounded-lg z-10
+                  opacity-0 transition-opacity duration-500
+                  bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,1)_100%)]
+                  group-hover:opacity-70">
+                                </div>
+
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Luxury Gold -->
+                    <div class="swiper-slide px-2 flex !h-auto">
+                        <button type="button" class="work-card-btn flex flex-col group tilt-card"
+                            data-project="syance"
+                            data-cursor-color="#1c1c1e" data-cursor-text="#DDF160">
+                            <div class="relative overflow-hidden rounded-2xl aspect-3/2 h-full tilt-inner">
+
+                                <img src="./assets/images/work/syance-thumbnail.webp" alt="Luxury Gold"
+                                    class="w-full h-full object-cover rounded-lg transition-transform duration-500 ease-out group-hover:scale-[1.05]"
+                                    loading="lazy" decoding="async">
+
+                                <div class="text-white absolute inset-x-0 bottom-0 p-4 z-20">
+                                    <h3 class="text-lg xl:text-xl font-medium flex items-center gap-2">
+                                        SYANCE
+                                        <span
+                                            class="opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+                                            <i class="fa-solid fa-arrow-right"></i>
+                                        </span>
+                                    </h3>
+                                </div>
+
+                                <div class="absolute inset-0 rounded-lg z-10
+                  bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.85)_100%)]">
+                                </div>
+
+                                <div class="absolute inset-0 rounded-lg z-10
+                  opacity-0 transition-opacity duration-500
+                  bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,1)_100%)]
+                  group-hover:opacity-70">
+                                </div>
+
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Mxology -->
+                    <div class="swiper-slide px-2 flex !h-auto">
+                        <button type="button" class="work-card-btn flex flex-col group tilt-card"
+                            data-project="treedefi"
+                            data-cursor-color="#14532d" data-cursor-text="#DDF160">
+                            <div class="relative overflow-hidden rounded-2xl aspect-3/2 h-full tilt-inner">
+
+                                <img src="./assets/images/work/treedefi-thumbnail.webp" alt="Mxology"
+                                    class="w-full h-full object-cover rounded-lg transition-transform duration-500 ease-out group-hover:scale-[1.05]"
+                                    loading="lazy" decoding="async">
+
+                                <div class="text-white absolute inset-x-0 bottom-0 p-4 z-20">
+                                    <h3 class="text-lg xl:text-xl font-medium flex items-center gap-2">
+                                        TreeDeFi
+                                        <span
+                                            class="opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+                                            <i class="fa-solid fa-arrow-right"></i>
+                                        </span>
+                                    </h3>
+                                </div>
+
+                                <div class="absolute inset-0 rounded-lg z-10
+                  bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.85)_100%)]">
+                                </div>
+
+                                <div class="absolute inset-0 rounded-lg z-10
+                  opacity-0 transition-opacity duration-500
+                  bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,1)_100%)]
+                  group-hover:opacity-70">
+                                </div>
+
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- WLDLFE -->
+                    <div class="swiper-slide px-2 flex !h-auto">
+                        <button type="button" class="work-card-btn flex flex-col group tilt-card"
+                            data-project="firmable"
+                            data-cursor-color="#1d4ed8" data-cursor-text="#fff">
+                            <div class="relative overflow-hidden rounded-2xl aspect-3/2 h-full tilt-inner">
+
+                                <img src="./assets/images/work/firmable-thumbnail.webp" alt="WLDLFE Bikes"
+                                    class="w-full h-full object-cover rounded-lg transition-transform duration-500 ease-out group-hover:scale-[1.05]"
+                                    loading="lazy" decoding="async">
+
+                                <div class="text-white absolute inset-x-0 bottom-0 p-4 z-20">
+                                    <h3 class="text-lg xl:text-xl font-medium flex items-center gap-2">
+                                        Firmable
+                                        <span
+                                            class="opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+                                            <i class="fa-solid fa-arrow-right"></i>
+                                        </span>
+                                    </h3>
+                                </div>
+
+                                <div class="absolute inset-0 rounded-lg z-10
+                  bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.85)_100%)]">
+                                </div>
+
+                                <div class="absolute inset-0 rounded-lg z-10
+                  opacity-0 transition-opacity duration-500
+                  bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,1)_100%)]
+                  group-hover:opacity-70">
+                                </div>
+
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Follow The Camino -->
+                    <div class="swiper-slide px-2 flex !h-auto">
+                        <button type="button" class="work-card-btn flex flex-col group tilt-card"
+                            data-project="followthecamino"
+                            data-cursor-color="#0369a1" data-cursor-text="#fff">
+                            <div class="relative overflow-hidden rounded-2xl aspect-3/2 h-full tilt-inner">
+
+                                <img src="./assets/images/work/followthecamino-thumbnail.webp" alt="Follow The Camino"
+                                    class="w-full h-full object-cover rounded-lg transition-transform duration-500 ease-out group-hover:scale-[1.05]"
+                                    loading="lazy" decoding="async">
+
+                                <div class="text-white absolute inset-x-0 bottom-0 p-4 z-20">
+                                    <h3 class="text-lg xl:text-xl font-medium flex items-center gap-2">
+                                        Follow The Camino
+                                        <span
+                                            class="opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+                                            <i class="fa-solid fa-arrow-right"></i>
+                                        </span>
+                                    </h3>
+                                </div>
+
+                                <div class="absolute inset-0 rounded-lg z-10
+                  bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.85)_100%)]">
+                                </div>
+
+                                <div class="absolute inset-0 rounded-lg z-10
+                  opacity-0 transition-opacity duration-500
+                  bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,1)_100%)]
+                  group-hover:opacity-70">
+                                </div>
+
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- PlannerDAO -->
+                    <div class="swiper-slide px-2 flex !h-auto">
+                        <button type="button" class="work-card-btn flex flex-col group tilt-card"
+                            data-project="plannerdao"
+                            data-cursor-color="#6d28d9" data-cursor-text="#fff">
+                            <div class="relative overflow-hidden rounded-2xl aspect-3/2 h-full tilt-inner">
+
+                                <img src="./assets/images/work/plannerdao-thumnail.webp" alt="PlannerDAO"
+                                    class="w-full h-full object-cover rounded-lg transition-transform duration-500 ease-out group-hover:scale-[1.05]"
+                                    loading="lazy" decoding="async">
+
+                                <div class="text-white absolute inset-x-0 bottom-0 p-4 z-20">
+                                    <h3 class="text-lg xl:text-xl font-medium flex items-center gap-2">
+                                        PlannerDAO
+                                        <span
+                                            class="opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+                                            <i class="fa-solid fa-arrow-right"></i>
+                                        </span>
+                                    </h3>
+                                </div>
+
+                                <div class="absolute inset-0 rounded-lg z-10
+                  bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.85)_100%)]">
+                                </div>
+
+                                <div class="absolute inset-0 rounded-lg z-10
+                  opacity-0 transition-opacity duration-500
+                  bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,1)_100%)]
+                  group-hover:opacity-70">
+                                </div>
+
+                            </div>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Navigation -->
+                <div class="flex items-center justify-center gap-4 mt-8">
+                    <button
+                        class="process-prev w-12 h-12 rounded-full bg-lime-300 text-dark flex items-center justify-center hover:bg-lime-200 transition" data-magnetic data-magnetic-strength="0.45"
+                        aria-label="Previous step">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <button
+                        class="process-next w-12 h-12 rounded-full bg-lime-300 text-dark flex items-center justify-center hover:bg-lime-200 transition" data-magnetic data-magnetic-strength="0.45"
+                        aria-label="Next step">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+
+
+
+        <!-- Services List Section -->
+        <section aria-labelledby="services-heading" class="relative py-12 md:py-24 text-white overflow-hidden" id="services">
+
+            <div class="mb-20">
+                <!-- First Row -->
+                <h2
+                    class="flex items-center gap-16 text-[120px] font-semibold tracking-tight uppercase w-max animate-marquee whitespace-nowrap">
+                    <span class="text-transparent stroke-text">What We Build</span>
+                    <span class="text-lime-400 text-4xl">•</span>
+                    <span class="text-white">Our Services</span>
+                    <span class="text-lime-400 text-4xl">•</span>
+                    <span class="text-transparent stroke-text">What We Build</span>
+                    <span class="text-lime-400 text-4xl">•</span>
+                    <span class="text-white">Our Services</span>
+                    <span class="text-lime-400 text-4xl">•</span>
+                </h2>
+                <!-- Second Row -->
+                <h2
+                    class="flex items-center gap-16 text-[120px] font-semibold tracking-tight uppercase w-max animate-marquee-reverse whitespace-nowrap">
+                    <span class="text-transparent stroke-text">Our Services</span>
+                    <span class="text-lime-400 text-4xl">•</span>
+                    <span class="text-white">What We Build</span>
+                    <span class="text-lime-400 text-4xl">•</span>
+                    <span class="text-transparent stroke-text">Our Services</span>
+                    <span class="text-lime-400 text-4xl">•</span>
+                    <span class="text-white">What We Build</span>
+                    <span class="text-lime-400 text-4xl">•</span>
+                </h2>
+            </div>
+
+            <div class="divide-y divide-white/20 border-y border-white/20">
+
+                <!-- 01 -->
+                <a href="#contact" class="group block w-full cursor-pointer transition-all duration-300 hover:bg-[rgba(255,255,255,0.08)]">
+                    <div class="container mx-auto px-4 flex items-center justify-between py-8 md:py-12">
+                        <div class="flex items-center gap-6 md:gap-10">
+                            <span class="text-lime-300 text-sm font-bold min-w-[32px]">01</span>
+                            <h3 class="text-3xl md:text-5xl font-extrabold transition-transform duration-300 group-hover:translate-x-2">
+                                Custom Apparel Website Design
+                            </h3>
+                        </div>
+                        <span class="w-12 h-12 rounded-full bg-lime-300 text-dark flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-[-45deg]">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- 02 -->
+                <a href="#contact" class="group block w-full cursor-pointer transition-all duration-300 hover:bg-[rgba(255,255,255,0.08)]">
+                    <div class="container mx-auto px-4 flex items-center justify-between py-8 md:py-12">
+                        <div class="flex items-center gap-6 md:gap-10">
+                            <span class="text-lime-300 text-sm font-bold min-w-[32px]">02</span>
+                            <h3 class="text-3xl md:text-5xl font-extrabold transition-transform duration-300 group-hover:translate-x-2">
+                                DecoNetwork Setup & Integration
+                            </h3>
+                        </div>
+                        <span class="w-12 h-12 rounded-full bg-lime-300 text-dark flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-[-45deg]">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- 03 -->
+                <a href="#contact" class="group block w-full cursor-pointer transition-all duration-300 hover:bg-[rgba(255,255,255,0.08)]">
+                    <div class="container mx-auto px-4 flex items-center justify-between py-8 md:py-12">
+                        <div class="flex items-center gap-6 md:gap-10">
+                            <span class="text-lime-300 text-sm font-bold min-w-[32px]">03</span>
+                            <h3 class="text-3xl md:text-5xl font-extrabold transition-transform duration-300 group-hover:translate-x-2">
+                                eCommerce & Checkout Optimisation
+                            </h3>
+                        </div>
+                        <span class="w-12 h-12 rounded-full bg-lime-300 text-dark flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-[-45deg]">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- 04 -->
+                <a href="#contact" class="group block w-full cursor-pointer transition-all duration-300 hover:bg-[rgba(255,255,255,0.08)]">
+                    <div class="container mx-auto px-4 flex items-center justify-between py-8 md:py-12">
+                        <div class="flex items-center gap-6 md:gap-10">
+                            <span class="text-lime-300 text-sm font-bold min-w-[32px]">04</span>
+                            <h3 class="text-3xl md:text-5xl font-extrabold transition-transform duration-300 group-hover:translate-x-2">
+                                SEO & Performance Optimisation
+                            </h3>
+                        </div>
+                        <span class="w-12 h-12 rounded-full bg-lime-300 text-dark flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-[-45deg]">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- 05 -->
+                <a href="#contact" class="group block w-full cursor-pointer transition-all duration-300 hover:bg-[rgba(255,255,255,0.08)]">
+                    <div class="container mx-auto px-4 flex items-center justify-between py-8 md:py-12">
+                        <div class="flex items-center gap-6 md:gap-10">
+                            <span class="text-lime-300 text-sm font-bold min-w-[32px]">05</span>
+                            <h3 class="text-3xl md:text-5xl font-extrabold transition-transform duration-300 group-hover:translate-x-2">
+                                Third-Party App Integrations
+                            </h3>
+                        </div>
+                        <span class="w-12 h-12 rounded-full bg-lime-300 text-dark flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-[-45deg]">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- 06 -->
+                <a href="#contact" class="group block w-full cursor-pointer transition-all duration-300 hover:bg-[rgba(255,255,255,0.08)]">
+                    <div class="container mx-auto px-4 flex items-center justify-between py-8 md:py-12">
+                        <div class="flex items-center gap-6 md:gap-10">
+                            <span class="text-lime-300 text-sm font-bold min-w-[32px]">06</span>
+                            <h3 class="text-3xl md:text-5xl font-extrabold transition-transform duration-300 group-hover:translate-x-2">
+                                Ongoing Support & Maintenance
+                            </h3>
+                        </div>
+                        <span class="w-12 h-12 rounded-full bg-lime-300 text-dark flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-[-45deg]">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <div class="relative">
+            <!-- Design That Drives Measurable Growth Section -->
+            <section aria-labelledby="growth-heading" aria-describedby="growth-desc"
+                class="relative text-white py-12 md:py-24 overflow-hidden" id="why-us" role="region">
+
+                <div class="container relative mx-auto px-4">
+                    <div class="lg:max-w-[775px]">
+                        <h2 id="growth-heading" class="mb-3">
+                            Not Just Another Freelancer.<br><span class="font-light">Your Growth Partner.</span>
+                        </h2>
+                        <p class="text-white/70 text-base lg:text-lg" id="growth-desc">
+                            We specialise exclusively in custom apparel websites. That means deep expertise,
+                            faster builds, and stores that are optimised to compete — and win.
+                        </p>
+                    </div>
+
+                    <!-- Cards -->
+                    <div class="mt-12 grid gap-[28px] grid-cols-1 md:grid-cols-3">
+
+                        <!-- Tall -->
+                        <article class="group">
+                            <div class="relative aspect-[3/4] rounded-2xl overflow-hidden">
+
+                                <!-- Image -->
+                                <img alt="Faster product delivery and fewer reworks illustration"
+                                    src="./assets/images/design-growth/faster-product-delivery.jpg" width="428"
+                                    height="574" class="absolute inset-0 w-full h-full object-cover rounded-2xl
+                                       transition-transform duration-500 ease-out
+                                       group-hover:scale-[1.05]" loading="lazy" decoding="async" />
+
+                                <!-- Text Overlay -->
+                                <div class="absolute inset-x-0 bottom-0 p-4 lg:p-6 z-20">
+                                    <h3 class="font-bold text-white text-base md:text-sm lg:text-lg">
+                                        Stores built to convert, not just look good
+                                    </h3>
+                                </div>
+
+                                <!-- Base Gradient -->
+                                <div class="absolute inset-0 pointer-events-none rounded-2xl z-10
+                                        bg-[linear-gradient(180deg,rgba(5,10,46,0)_0%,rgba(5,10,46,0.8)_100%)]">
+                                </div>
+
+                                <!-- Hover Gradient -->
+                                <div class="absolute inset-0 pointer-events-none rounded-lg z-10
+                                            opacity-0 transition-opacity duration-500
+                                            bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,1)_100%)]
+                                            group-hover:opacity-70">
+                                </div>
+                            </div>
+                        </article>
+
+
+
+                        <!-- Short Column → 2 stacked cards -->
+                        <article class="flex flex-col gap-6">
+
+                            <!-- Short Card 1 -->
+                            <div class="group relative aspect-[3/2] rounded-2xl overflow-hidden md:flex-1">
+
+                                <!-- Image -->
+                                <img alt="Higher conversion across key touchpoints illustration"
+                                    src="./assets/images/design-growth/higher-conversion.webp" width="428" height="275"
+                                    class="absolute inset-0 w-full h-full object-cover rounded-2xl
+                                       transition-transform duration-500 ease-out
+                                       group-hover:scale-[1.05]" loading="lazy" decoding="async" />
+
+                                <!-- Text -->
+                                <div class="absolute inset-x-0 bottom-0 p-4 lg:p-6 z-20">
+                                    <h3 class="font-bold text-white text-base md:text-sm lg:text-lg">
+                                        DecoNetwork experts — not generalists
+                                    </h3>
+                                </div>
+
+                                <!-- Base Gradient -->
+                                <div class="absolute inset-0 pointer-events-none rounded-2xl z-10
+                                        bg-[linear-gradient(180deg,rgba(5,10,46,0)_0%,rgba(5,10,46,0.8)_100%)]">
+                                </div>
+
+                                <!-- Hover Gradient -->
+                                <div class="absolute inset-0 pointer-events-none rounded-lg z-10
+                                            opacity-0 transition-opacity duration-500
+                                            bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,1)_100%)]
+                                            group-hover:opacity-70">
+                                </div>
+
+                            </div>
+
+
+                            <!-- Short Card 2 -->
+                            <div class="group relative aspect-[3/2] rounded-2xl overflow-hidden md:flex-1">
+
+                                <!-- Image -->
+                                <img alt="Senior designers who work like part of your team illustration"
+                                    src="./assets/images/design-growth/senior-designers.webp" width="428" height="275"
+                                    class="absolute inset-0 w-full h-full object-cover rounded-2xl
+                                       transition-transform duration-500 ease-out
+                                       group-hover:scale-[1.05]" loading="lazy" decoding="async" />
+
+                                <!-- Text -->
+                                <div class="absolute inset-x-0 bottom-0 p-4 lg:p-6 z-20">
+                                    <h3 class="font-bold text-white text-base md:text-sm lg:text-lg">
+                                        Faster delivery, less back-and-forth
+                                    </h3>
+                                </div>
+
+                                <!-- Base Gradient -->
+                                <div class="absolute inset-0 pointer-events-none rounded-2xl z-10
+                                        bg-[linear-gradient(180deg,rgba(5,10,46,0)_0%,rgba(5,10,46,0.8)_100%)]">
+                                </div>
+
+                                <!-- Hover Gradient -->
+                                <div class="absolute inset-0 pointer-events-none rounded-lg z-10
+                                            opacity-0 transition-opacity duration-500
+                                            bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,1)_100%)]
+                                            group-hover:opacity-70">
+                                </div>
+
+                            </div>
+
+                        </article>
+
+
+
+                        <!-- Tall -->
+                        <article class="group">
+                            <div
+                                class="relative aspect-[3/4] xl:h-[130%] xl:max-w-full xl:mt-[-40%] rounded-2xl overflow-hidden">
+
+                                <!-- Image -->
+                                <img alt="Design systems that scale with your roadmap illustration"
+                                    src="./assets/images/design-growth/faster-product-delivery.webp" width="428"
+                                    height="740" class="absolute inset-0 w-full h-full object-cover rounded-2xl
+                                       transition-transform duration-500 ease-out
+                                       group-hover:scale-[1.05]" loading="lazy" decoding="async" />
+
+                                <!-- Text -->
+                                <div class="absolute inset-x-0 bottom-0 p-4 lg:p-6 z-20">
+                                    <h3 class="font-bold text-white text-base md:text-sm lg:text-lg">
+                                        Revenue-focused — every decision tied to growth
+                                    </h3>
+                                </div>
+
+                                <!-- Base Gradient -->
+                                <div class="absolute inset-0 pointer-events-none rounded-2xl z-10
+                                        bg-[linear-gradient(180deg,rgba(5,10,46,0)_0%,rgba(5,10,46,0.8)_100%)]">
+                                </div>
+
+                                <!-- Hover Gradient -->
+                                <div class="absolute inset-0 pointer-events-none rounded-lg z-10
+                                            opacity-0 transition-opacity duration-500
+                                            bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,1)_100%)]
+                                            group-hover:opacity-70">
+                                </div>
+
+                            </div>
+                        </article>
+
+                    </div>
+
+                </div>
+            </section>
+
+
+            <section class="py-12 md:py-24 overflow-hidden hidden">
+                <div data-social-callout="wrap" class="flex justify-center items-center">
+                    <div class="container relative mx-auto px-4">
+                        <!-- Heading Section -->
+                        <div class="text-center">
+                            <h2 class="font-extrabold mb-4">
+                                Partnerships that deliver results
+                            </h2>
+                            <p class="text-white/70 text-base lg:text-lg max-w-[860px] mx-auto">
+                                DecoStorePros works with apparel businesses who want to dominate online. From new stores
+                                to full redesigns, we turn DecoNetwork into a high-performing sales machine.
+                            </p>
+                        </div>
+
+                        <div class="callout-wrap flex justify-center items-center w-full -mt-[5rem] sm:mt-0 md:mt-12 xl:mt-20 h-[35rem] sm:h-[35rem] max-w-[80rem] relative max-md:hidden"
+                            aria-hidden="true">
+                            <div
+                                class="callout-socials-card-w top-0 absolute z-0 flex-none w-[18rem] h-[30rem] overflow-hidden [backface-visibility:hidden] [will-change:transform]">
+                                <img alt="" loading="lazy" decoding="async"
+                                    src="./assets/images/partnerships/frame-4.jpg" class="w-full h-full object-cover" />
+                            </div>
+                            <div
+                                class="callout-socials-card-w top-0 absolute z-0 flex-none w-[18rem] h-[30rem] overflow-hidden [backface-visibility:hidden] [will-change:transform]">
+                                <img alt="" loading="lazy" decoding="async"
+                                    src="./assets/images/partnerships/frame-2.jpg" class="w-full h-full object-cover" />
+                            </div>
+                            <div
+                                class="callout-socials-card-w top-0 absolute z-0 flex-none w-[18rem] h-[30rem] overflow-hidden [backface-visibility:hidden] [will-change:transform]">
+                                <img alt="" loading="lazy" decoding="async"
+                                    src="./assets/images/partnerships/frame-3.jpg" class="w-full h-full object-cover" />
+                            </div>
+                            <div
+                                class="callout-socials-card-w top-0 absolute z-0 flex-none w-[18rem] h-[30rem] overflow-hidden [backface-visibility:hidden] [will-change:transform]">
+                                <img alt="" loading="lazy" decoding="async"
+                                    src="./assets/images/partnerships/frame-1.jpg" class="w-full h-full object-cover" />
+                            </div>
+                            <div
+                                class="callout-socials-card-w top-0 absolute z-0 flex-none w-[18rem] h-[30rem] overflow-hidden [backface-visibility:hidden] [will-change:transform]">
+                                <img alt="" loading="lazy" decoding="async"
+                                    src="./assets/images/partnerships/frame-5.jpg" class="w-full h-full object-cover" />
+                            </div>
+                            <div
+                                class="callout-socials-card-w top-0 absolute z-0 flex-none w-[18rem] h-[30rem] overflow-hidden [backface-visibility:hidden] [will-change:transform]">
+                                <img alt="" loading="lazy" decoding="async"
+                                    src="./assets/images/partnerships/frame-3.jpg" class="w-full h-full object-cover" />
+                            </div>
+                            <div
+                                class="callout-socials-card-w top-0 absolute z-0 flex-none w-[18rem] h-[30rem] overflow-hidden [backface-visibility:hidden] [will-change:transform]">
+                                <img alt="" loading="lazy" decoding="async"
+                                    src="./assets/images/partnerships/frame-4.jpg" class="w-full h-full object-cover" />
+                            </div>
+                        </div>
+
+
+
+                        <div class="swiper mySwiper md:hidden max-md:mt-[48px] overflow-hidden">
+                            <div class="swiper-wrapper">
+                                <div class="overflow-hidden swiper-slide">
+                                    <img alt="" loading="lazy" decoding="async"
+                                        src="./assets/images/partnerships/frame-1.jpg"
+                                        class="w-full h-full object-cover" />
+                                </div>
+                                <div class="overflow-hidden swiper-slide">
+                                    <img alt="" loading="lazy" decoding="async"
+                                        src="./assets/images/partnerships/frame-1.jpg"
+                                        class="w-full h-full object-cover" />
+                                </div>
+                                <div class="overflow-hidden swiper-slide">
+                                    <img alt="" loading="lazy" decoding="async"
+                                        src="./assets/images/partnerships/frame-1.jpg"
+                                        class="w-full h-full object-cover" />
+                                </div>
+                                <div class="overflow-hidden swiper-slide">
+                                    <img alt="" loading="lazy" decoding="async"
+                                        src="./assets/images/partnerships/frame-1.jpg"
+                                        class="w-full h-full object-cover" />
+                                </div>
+                                <div class="overflow-hidden swiper-slide">
+                                    <img alt="" loading="lazy" decoding="async"
+                                        src="./assets/images/partnerships/frame-1.jpg"
+                                        class="w-full h-full object-cover" />
+                                </div>
+                                <div class="overflow-hidden swiper-slide">
+                                    <img alt="" loading="lazy" decoding="async"
+                                        src="./assets/images/partnerships/frame-1.jpg"
+                                        class="w-full h-full object-cover" />
+                                </div>
+                                <div class="overflow-hidden swiper-slide">
+                                    <img alt="" loading="lazy" decoding="async"
+                                        src="./assets/images/partnerships/frame-1.jpg"
+                                        class="w-full h-full object-cover" />
+                                </div>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Our Process Section -->
+            <section aria-labelledby="process-heading" class="relative py-12 md:py-24 overflow-hidden text-white" id="process">
+
+                <div class="container relative mx-auto px-4">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+
+                        <!-- Left content -->
+                        <div class="lg:col-span-4">
+                            <h2 id="process-heading" class="font-extrabold mb-4">
+                                A Proven Process.<br><span class="font-light">Predictable Results.</span>
+                            </h2>
+                            <p class="text-white/70 text-base lg:text-lg max-w-[360px]">
+                                From kickoff to go-live, every step is designed to move fast,
+                                stay on brief, and deliver a store that actually performs.
+                            </p>
+
+                            <!-- Navigation -->
+                            <div class="flex items-center gap-4 mt-8">
+                                <button
+                                    class="process-prev w-12 h-12 rounded-full bg-lime-300 text-dark flex items-center justify-center hover:bg-lime-200 transition" data-magnetic data-magnetic-strength="0.45"
+                                    aria-label="Previous step">
+                                    <i class="fa-solid fa-arrow-left"></i>
+                                </button>
+                                <button
+                                    class="process-next w-12 h-12 rounded-full bg-lime-300 text-dark flex items-center justify-center hover:bg-lime-200 transition" data-magnetic data-magnetic-strength="0.45"
+                                    aria-label="Next step">
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Slider -->
+                        <div class="lg:col-span-8">
+                            <div class="swiper process-swiper overflow-hidden w-[76vw] lg:w-[65vw]">
+                                <div class="swiper-wrapper">
+
+                                    <!-- 1. Discovery -->
+                                    <article class="swiper-slide !w-[260px] sm:!w-[304px] md:!w-[350px] xl:!w-[430px]">
+                                        <div class="process-card bg-[#D5BFF0] text-dark">
+                                            <span class="process-number">1</span>
+                                            <h3>Discovery Call</h3>
+                                            <p>
+                                                We learn your business, goals, and what’s not
+                                                working with your current store — or where to start.
+                                            </p>
+                                        </div>
+                                    </article>
+
+                                    <!-- 2. Strategy -->
+                                    <article class="swiper-slide !w-[260px] sm:!w-[304px] md:!w-[350px] xl:!w-[430px]">
+                                        <div class="process-card bg-[#DFFF4F] text-dark">
+                                            <span class="process-number">2</span>
+                                            <h3>Strategy & Blueprint</h3>
+                                            <p>
+                                                We map out your site structure, user flow,
+                                                and conversion strategy before touching a pixel.
+                                            </p>
+                                        </div>
+                                    </article>
+
+                                    <!-- 3. Design -->
+                                    <article class="swiper-slide !w-[260px] sm:!w-[304px] md:!w-[350px] xl:!w-[430px]">
+                                        <div class="process-card bg-[#73F5E5] text-dark">
+                                            <span class="process-number">3</span>
+                                            <h3>Custom Design</h3>
+                                            <p>
+                                                Your store is designed from scratch — branded,
+                                                polished, and built to stand out against Custom Ink.
+                                            </p>
+                                        </div>
+                                    </article>
+
+                                    <!-- 4. DecoNetwork Build -->
+                                    <article class="swiper-slide !w-[260px] sm:!w-[304px] md:!w-[350px] xl:!w-[430px]">
+                                        <div class="process-card bg-[#D8C5F6] text-dark">
+                                            <span class="process-number">4</span>
+                                            <h3>DecoNetwork Build</h3>
+                                            <p>
+                                                We build everything inside DecoNetwork — products,
+                                                pricing, integrations, and checkout flows.
+                                            </p>
+                                        </div>
+                                    </article>
+
+                                    <!-- 5. Integrations -->
+                                    <article class="swiper-slide !w-[260px] sm:!w-[304px] md:!w-[350px] xl:!w-[430px]">
+                                        <div class="process-card bg-[#E7FE56] text-dark">
+                                            <span class="process-number">5</span>
+                                            <h3>App Integrations</h3>
+                                            <p>
+                                                Connect your store to the tools you rely on —
+                                                CRM, shipping, accounting, and more.
+                                            </p>
+                                        </div>
+                                    </article>
+
+                                    <!-- 6. Testing & Launch -->
+                                    <article class="swiper-slide !w-[260px] sm:!w-[304px] md:!w-[350px] xl:!w-[430px]">
+                                        <div class="process-card bg-[#73F5E5] text-dark">
+                                            <span class="process-number">6</span>
+                                            <h3>Testing & Launch</h3>
+                                            <p>
+                                                Full QA across devices and browsers.
+                                                We go live only when everything is perfect.
+                                            </p>
+                                        </div>
+                                    </article>
+
+                                    <!-- 7. Growth Support -->
+                                    <article class="swiper-slide !w-[260px] sm:!w-[304px] md:!w-[350px] xl:!w-[430px]">
+                                        <div class="process-card bg-[#D8C5F6] text-dark">
+                                            <span class="process-number">7</span>
+                                            <h3>Ongoing Support</h3>
+                                            <p>
+                                                We stick around — updates, optimisations, and
+                                                growth tweaks as your business scales.
+                                            </p>
+                                        </div>
+                                    </article>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <video autoplay muted loop playsinline crossorigin="anonymous" class="
+                absolute
+                top-0
+                left-1/2
+                w-full
+                h-full
+                -translate-x-1/2
+                object-cover
+                -z-[3]
+                pointer-events-none
+                opacity-25
+[mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]
+[-webkit-mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]
+
+                ">
+                <source media="(min-width: 768px)" type="video/mp4" src="../../assets/images/artistic-video.mp4" />
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <!-- How We Work Section -->
+        <section aria-labelledby="how-we-work-section" class="relative py-12 md:py-24 text-white hidden"
+            id="how-we-work" role="region">
+            <!-- Gradient background -->
+
+            <div class="container relative mx-auto px-4">
+                <!-- Heading Section -->
+                <div class="text-center">
+                    <h2 class="font-extrabold mb-4">
+                        How We Work
+                    </h2>
+                    <p class="text-white/70 text-base lg:text-lg max-w-[776px] mx-auto">
+                        A clear process, designed for real progress We believe the best partnerships are built on focus
+                        and trust. Our process keeps projects moving without losing depth or detail.
+                    </p>
+                </div>
+
+
+                <div class="relative mt-12">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 relative">
+
+                        <!-- Card 1: Discover -->
+                        <article class="group">
+                            <div class="relative aspect-[3/4] rounded-2xl overflow-hidden">
+
+                                <!-- Image -->
+                                <img src="./assets/images/design-growth/faster-product-delivery.webp"
+                                    alt="Discover process illustration" width="428" height="574" class="absolute inset-0 w-full h-full object-cover rounded-[1.2rem]
+                                           transition-transform duration-500 ease-out 
+                                           group-hover:scale-[1.05]" loading="lazy" decoding="async">
+
+                                <!-- Text Overlay -->
+                                <div class="absolute inset-x-0 bottom-0 p-4 z-20">
+                                    <h3 class="font-bold text-white text-lg mb-1">
+                                        1. Discover
+                                    </h3>
+                                    <p class="text-white/70 text-sm lg:text-base">
+                                        Align on goals, users, and measurable success metrics
+                                    </p>
+                                </div>
+
+                                <!-- Base gradient -->
+                                <div class="absolute inset-0 pointer-events-none z-10
+                                            bg-[linear-gradient(180deg,rgba(5,10,46,0)_0%,#050A2E_96%)]">
+                                </div>
+
+                                <!-- Hover gradient (fades in) -->
+                                <div class="absolute inset-0 pointer-events-none rounded-lg z-10
+                                            opacity-0 transition-opacity duration-500
+                                            bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,1)_100%)]
+                                            group-hover:opacity-70">
+                                </div>
+
+                            </div>
+                        </article>
+
+                        <!-- Card 2: Design -->
+                        <article class="group">
+                            <div class="relative aspect-[3/4] rounded-2xl overflow-hidden">
+
+                                <!-- Image -->
+                                <img src="./assets/images/design-growth/faster-product-delivery.webp"
+                                    alt="Design process illustration" width="428" height="574" class="absolute inset-0 w-full h-full object-cover rounded-[1.2rem]
+                                           transition-transform duration-500 ease-out 
+                                           group-hover:scale-[1.05]" loading="lazy" decoding="async">
+
+                                <!-- Text Overlay -->
+                                <div class="absolute inset-x-0 bottom-0 p-4 z-20">
+                                    <h3 class="font-bold text-white text-lg mb-1">
+                                        2. Design
+                                    </h3>
+                                    <p class="text-white/70 text-sm lg:text-base">
+                                        Translate strategy into effective, user-centered experiences
+                                    </p>
+                                </div>
+
+                                <!-- Base gradient -->
+                                <div class="absolute inset-0 pointer-events-none z-10
+                                            bg-[linear-gradient(180deg,rgba(5,10,46,0)_0%,#050A2E_96%)]">
+                                </div>
+
+                                <!-- Hover gradient (fades in) -->
+                                <div class="absolute inset-0 pointer-events-none rounded-lg z-10
+                                            opacity-0 transition-opacity duration-500
+                                            bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,1)_100%)]
+                                            group-hover:opacity-70">
+                                </div>
+
+                            </div>
+                        </article>
+
+                        <!-- Card 3: Deliver -->
+                        <article class="group">
+                            <div class="relative aspect-[3/4] rounded-2xl overflow-hidden">
+
+                                <!-- Image -->
+                                <img src="./assets/images/design-growth/faster-product-delivery.webp"
+                                    alt="Deliver process illustration" width="428" height="574" class="absolute inset-0 w-full h-full object-cover rounded-[1.2rem]
+                                           transition-transform duration-500 ease-out 
+                                           group-hover:scale-[1.05]" loading="lazy" decoding="async">
+
+                                <!-- Text Overlay -->
+                                <div class="absolute inset-x-0 bottom-0 p-4 z-20">
+                                    <h3 class="font-bold text-white text-lg mb-1">
+                                        3. Deliver
+                                    </h3>
+                                    <p class="text-white/70 text-sm lg:text-base">
+                                        Ship quickly, refine fast, and maintain exceptional quality
+                                    </p>
+                                </div>
+
+                                <!-- Base gradient -->
+                                <div class="absolute inset-0 pointer-events-none z-10
+                                            bg-[linear-gradient(180deg,rgba(5,10,46,0)_0%,#050A2E_96%)]">
+                                </div>
+
+                                <!-- Hover gradient (fades in) -->
+                                <div class="absolute inset-0 pointer-events-none rounded-lg z-10
+                                            opacity-0 transition-opacity duration-500
+                                            bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,1)_100%)]
+                                            group-hover:opacity-70">
+                                </div>
+
+                            </div>
+                        </article>
+
+                        <!-- Card 4: Partner -->
+                        <article class="group">
+                            <div class="relative aspect-[3/4] rounded-2xl overflow-hidden">
+
+                                <!-- Image -->
+                                <img src="./assets/images/design-growth/faster-product-delivery.webp"
+                                    alt="Partner process illustration" width="428" height="574" class="absolute inset-0 w-full h-full object-cover rounded-[1.2rem]
+                                           transition-transform duration-500 ease-out 
+                                           group-hover:scale-[1.05]" loading="lazy" decoding="async">
+
+                                <!-- Text Overlay -->
+                                <div class="absolute inset-x-0 bottom-0 p-4 z-20">
+                                    <h3 class="font-bold text-white text-lg mb-1">
+                                        4. Partner
+                                    </h3>
+                                    <p class="text-white/70 text-sm lg:text-base">
+                                        Support ongoing growth and continuous improvement
+                                    </p>
+                                </div>
+
+                                <!-- Base gradient -->
+                                <div class="absolute inset-0 pointer-events-none z-10
+                                            bg-[linear-gradient(180deg,rgba(5,10,46,0)_0%,#050A2E_96%)]">
+                                </div>
+
+                                <!-- Hover gradient (fades in) -->
+                                <div class="absolute inset-0 pointer-events-none rounded-lg z-10
+                                            opacity-0 transition-opacity duration-500
+                                            bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,1)_100%)]
+                                            group-hover:opacity-70">
+                                </div>
+
+                            </div>
+                        </article>
+
+                    </div>
+                </div>
+        </section>
+
+        <!-- Diagonal Marquee Section -->
+        <section class="relative py-24 overflow-hidden min-h-[320px]">
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div class="relative w-[180%] rotate-[-6deg]">
+
+                    <div class="marquee-wrapper">
+
+                        <div class="marquee-track bg-emerald-300 text-black font-bold py-4 text-lg md:text-xl">
+
+                            <!-- BLOCK 1 -->
+                            <div class="marquee-content px-6">
+                                <span class="mx-4">Custom Apparel Websites</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">DecoNetwork Setup</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">eCommerce Design</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">App Integrations</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">SEO Optimisation</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">Custom Ink Competitor</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">Checkout Optimisation</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">Ongoing Support</span><span class="mx-3 text-sm">✶</span>
+                            </div>
+
+                            <!-- BLOCK 2 -->
+                            <div class="marquee-content px-6">
+                                <span class="mx-4">Custom Apparel Websites</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">DecoNetwork Setup</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">eCommerce Design</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">App Integrations</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">SEO Optimisation</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">Custom Ink Competitor</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">Checkout Optimisation</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">Ongoing Support</span><span class="mx-3 text-sm">✶</span>
+                            </div>
+
+                            <!-- BLOCK 3 (CRITICAL) -->
+                            <div class="marquee-content px-6">
+                                <span class="mx-4">Custom Apparel Websites</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">DecoNetwork Setup</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">eCommerce Design</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">App Integrations</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">SEO Optimisation</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">Custom Ink Competitor</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">Checkout Optimisation</span><span class="mx-3 text-sm">✶</span>
+                                <span class="mx-4">Ongoing Support</span><span class="mx-3 text-sm">✶</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Moon CTA Section -->
+        <section class="relative py-24 md:py-40 md:mt-24 text-white overflow-hidden">
+
+            <!-- Background Image -->
+            <div class="absolute inset-0 container">
+                <img src="assets/images/moon.webp" alt="Moon background" class="w-full h-full object-cover">
+            </div>
+
+            <!-- Content -->
+            <div class="container relative mx-auto px-4 text-center max-w-[980px]">
+
+                <span class="block text-red-400 tracking-[0.3em] text-xs md:text-sm mb-4">
+                    READY TO DOMINATE ONLINE?
+                </span>
+
+                <h2 class="font-extrabold text-green
+                    sm:text-4xl md:text-5xl lg:text-6xl
+                   leading-[1.05] mb-6">
+                    Your Competitors Have<br class="hidden sm:block">Custom Ink Envy.<br class="hidden sm:block">Now You Can Too.
+                </h2>
+
+                <p class="text-white/70 text-sm sm:text-base md:text-lg
+                  max-w-[700px] mx-auto mb-10 leading-relaxed">
+                    Stop losing customers to polished competitors. Let’s build you a custom apparel store
+                    that looks premium, sells harder, and runs on DecoNetwork.
+                </p>
+
+                <!-- CTA Button -->
+                <a href="#contact"
+                    class="group inline-flex items-center gap-4 rounded-full bg-green text-dark pl-8 pr-2 py-2 font-bold capitalize shadow-lg transition-all duration-300 hover:bg-transparent hover:text-green hover:border-green border-green border focus:outline-none">
+
+                    <span>Get Your Free Audit</span>
+
+                    <span
+                        class="flex h-12 w-12 items-center justify-center rounded-full text-green bg-[#201F1E] transition duration-300 group-hover:bg-green group-hover:text-dark">
+                        <i class="fa-solid fa-arrow-up"></i>
+                    </span>
+                </a>
+
+            </div>
+        </section>
+
+
+
+        <!-- FAQ Section -->
+        <section class="relative text-white py-12 md:py-24" id="faq">
+            <div class="container mx-auto px-4 max-w-[800px]">
+                <div class="text-center mb-12">
+                    <h2 class="font-extrabold mb-4">Frequently Asked <span class="font-light">Questions</span></h2>
+                    <p class="text-white/60 text-base">Everything you need to know before getting started.</p>
+                </div>
+                <div class="space-y-4" id="faq-accordion">
+
+                    <div class="border border-white/10 rounded-2xl overflow-hidden">
+                        <button class="w-full flex items-center justify-between gap-4 p-6 text-left font-semibold text-base hover:bg-white/5 transition" type="button" aria-expanded="false" data-faq-toggle>
+                            <span>What platform do you build on?</span>
+                            <i class="fa-solid fa-plus text-lime-300 flex-shrink-0 transition-transform duration-300"></i>
+                        </button>
+                        <div class="overflow-hidden transition-all duration-300" style="max-height:0" data-faq-panel>
+                            <p class="px-6 pb-6 text-white/60 text-sm leading-relaxed">We specialise in DecoNetwork — the leading platform for custom apparel and decorated products businesses. Every store we build is fully optimised for DecoNetwork's features including online ordering, product decoration, and B2B/B2C stores.</p>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/10 rounded-2xl overflow-hidden">
+                        <button class="w-full flex items-center justify-between gap-4 p-6 text-left font-semibold text-base hover:bg-white/5 transition" type="button" aria-expanded="false" data-faq-toggle>
+                            <span>Can you work with my existing DecoNetwork store?</span>
+                            <i class="fa-solid fa-plus text-lime-300 flex-shrink-0 transition-transform duration-300"></i>
+                        </button>
+                        <div class="overflow-hidden transition-all duration-300" style="max-height:0" data-faq-panel>
+                            <p class="px-6 pb-6 text-white/60 text-sm leading-relaxed">Absolutely. Whether you need a full redesign, a conversion audit, or just want to add integrations and fix issues — we can work with what you already have. We'll start with a free audit to identify the biggest wins.</p>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/10 rounded-2xl overflow-hidden">
+                        <button class="w-full flex items-center justify-between gap-4 p-6 text-left font-semibold text-base hover:bg-white/5 transition" type="button" aria-expanded="false" data-faq-toggle>
+                            <span>How long does a new store take to build?</span>
+                            <i class="fa-solid fa-plus text-lime-300 flex-shrink-0 transition-transform duration-300"></i>
+                        </button>
+                        <div class="overflow-hidden transition-all duration-300" style="max-height:0" data-faq-panel>
+                            <p class="px-6 pb-6 text-white/60 text-sm leading-relaxed">Most stores are designed and built within 3–6 weeks depending on scope. We move fast without cutting corners — you'll have a clear timeline from day one.</p>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/10 rounded-2xl overflow-hidden">
+                        <button class="w-full flex items-center justify-between gap-4 p-6 text-left font-semibold text-base hover:bg-white/5 transition" type="button" aria-expanded="false" data-faq-toggle>
+                            <span>Do I need to already have a DecoNetwork subscription?</span>
+                            <i class="fa-solid fa-plus text-lime-300 flex-shrink-0 transition-transform duration-300"></i>
+                        </button>
+                        <div class="overflow-hidden transition-all duration-300" style="max-height:0" data-faq-panel>
+                            <p class="px-6 pb-6 text-white/60 text-sm leading-relaxed">No — we can help you get set up from scratch. We'll guide you through the right DecoNetwork plan for your business and handle the full setup as part of our service.</p>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/10 rounded-2xl overflow-hidden">
+                        <button class="w-full flex items-center justify-between gap-4 p-6 text-left font-semibold text-base hover:bg-white/5 transition" type="button" aria-expanded="false" data-faq-toggle>
+                            <span>What integrations do you support?</span>
+                            <i class="fa-solid fa-plus text-lime-300 flex-shrink-0 transition-transform duration-300"></i>
+                        </button>
+                        <div class="overflow-hidden transition-all duration-300" style="max-height:0" data-faq-panel>
+                            <p class="px-6 pb-6 text-white/60 text-sm leading-relaxed">We connect your store to the tools you rely on — shipping providers, CRMs, accounting software (Xero, QuickBooks), email marketing, and more. If you have a specific tool in mind, just ask.</p>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/10 rounded-2xl overflow-hidden">
+                        <button class="w-full flex items-center justify-between gap-4 p-6 text-left font-semibold text-base hover:bg-white/5 transition" type="button" aria-expanded="false" data-faq-toggle>
+                            <span>Will my store rank on Google?</span>
+                            <i class="fa-solid fa-plus text-lime-300 flex-shrink-0 transition-transform duration-300"></i>
+                        </button>
+                        <div class="overflow-hidden transition-all duration-300" style="max-height:0" data-faq-panel>
+                            <p class="px-6 pb-6 text-white/60 text-sm leading-relaxed">Every store we build follows on-page SEO best practices — fast load times, clean structure, optimised metadata, and schema markup. For ongoing SEO campaigns, we offer that as an add-on service.</p>
+                        </div>
+                    </div>
+
+                    <div class="border border-white/10 rounded-2xl overflow-hidden">
+                        <button class="w-full flex items-center justify-between gap-4 p-6 text-left font-semibold text-base hover:bg-white/5 transition" type="button" aria-expanded="false" data-faq-toggle>
+                            <span>How much does it cost?</span>
+                            <i class="fa-solid fa-plus text-lime-300 flex-shrink-0 transition-transform duration-300"></i>
+                        </button>
+                        <div class="overflow-hidden transition-all duration-300" style="max-height:0" data-faq-panel>
+                            <p class="px-6 pb-6 text-white/60 text-sm leading-relaxed">It depends on the scope of your project. A basic store starts from $1,000 and full custom builds range from $3,000–$5,000+. Get in touch for a free audit and we'll give you a clear, itemised quote.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact/Enquiry Section -->
+        <section aria-labelledby="contact-heading" class="text-white pb-12 md:pb-24" id="contact" role="region">
+            <div class="container mx-auto px-4">
+                <div
+                    class="flex flex-col lg:flex-row items-start gap-4 md:gap-10 justify-between bg-contact-bg bg-cover bg-bottom bg-no-repeat !pb-0 p-6 md:p-10 rounded-2xl">
+                    <!-- Left Column - Information -->
+                    <div
+                        class="max-w-[519px] max-lg:mx-auto lg:block flex flex-col items-center justify-center text-center lg:text-left">
+                        <div>
+                            <h2 class="font-extrabold mb-4" id="contact-heading">
+                                Ready to Unlock Your<br>DecoNetwork's Full Potential?
+                            </h2>
+                            <p class="text-white/70 text-sm lg:text-base max-w-[467px]">
+                                Tell us about your store and we'll put together a free audit showing exactly
+                                what we'd fix and how we'd grow it.
+                            </p>
+                        </div>
+                        <div class="space-y-3 my-4 text-left">
+                            <div class="flex items-start gap-2">
+                                <div class="flex items-center justify-center flex-shrink-0 -mt-[0.5px]">
+                                    <i class="fa-regular fa-circle-check text-white text-sm sm:text-base"></i>
+                                </div>
+                                <span class="text-white/70 text-sm sm:text-base">
+                                    Free audit — no commitment required
+                                </span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <div class="flex items-center justify-center flex-shrink-0 -mt-[0.5px]">
+                                    <i class="fa-regular fa-circle-check text-white text-sm sm:text-base"></i>
+                                </div>
+                                <span class="text-white/70 text-sm sm:text-base">
+                                    We'll respond within 24 hours
+                                </span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <div class="flex items-center justify-center flex-shrink-0 -mt-[0.5px]">
+                                    <i class="fa-regular fa-circle-check text-white text-sm sm:text-base"></i>
+                                </div>
+                                <span class="text-white/70 text-sm sm:text-base">
+                                    Your information is kept confidential
+                                </span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <div class="flex items-center justify-center flex-shrink-0 -mt-[0.5px]">
+                                    <i class="fa-regular fa-circle-check text-white text-sm sm:text-base"></i>
+                                </div>
+                                <span class="text-white/70 text-sm sm:text-base">
+                                    No spam, no mailing lists — ever
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- Right Column - Enquiry Form -->
+                    <div class="max-w-[519px] md:max-w-[658px] max-lg:mx-auto w-full">
+                        <form action="contact.php" method="post" aria-labelledby="contact-form-title" class="space-y-4"
+                            novalidate="">
+                            <!-- Error summary for screen readers -->
+                            <div aria-live="polite" class="sr-only" id="form-errors" role="alert">
+                            </div>
+                            <!-- Name Field -->
+                            <div>
+                                <label class="block text-white text-sm font-medium mb-2" for="name">
+                                    Name
+                                    <span aria-label="required" class="text-red-400">
+                                        *
+                                    </span>
+                                </label>
+                                <div class="relative">
+                                    <input aria-describedby="name-help" class="input-global" id="name" name="name"
+                                        placeholder="John Doe" required="" type="text" pattern="^[A-Za-zÀ-ÿ\s\-\']+$" />
+                                    <!-- <div class="absolute bg-[#00D4FF]/20 absolute inset-0 blur-[44px] z-[-1]"></div> -->
+                                </div>
+                                <div class="sr-only" id="name-help">
+                                    Enter your full name
+                                </div>
+                            </div>
+                            <!-- Email Field -->
+                            <div>
+                                <label class="block text-white text-sm font-medium mb-2" for="email">
+                                    Your
+                                    Email
+                                    <span aria-label="required" class="text-red-400">
+                                        *
+                                    </span>
+                                </label>
+                                <div class="relative">
+                                    <input aria-describedby="email-help" class="input-global" id="email" name="email"
+                                        placeholder="john@doe.com" required="" type="email" />
+                                </div>
+                                <div class="sr-only" id="email-help">
+                                    Enter a valid email address
+                                </div>
+                            </div>
+                            <!-- Enquiry Subject -->
+                            <div>
+                                <label class="block text-white text-sm font-medium mb-2" for="enquiry-subject">
+                                    Enquiry Subject
+                                </label>
+                                <div class="relative">
+                                    <select aria-describedby="enquiry-help" class="select-global" id="enquiry-subject"
+                                        name="enquiry-subject">
+                                        <option disabled="" hidden="" selected="" value="">
+                                            Select Option
+                                        </option>
+                                        <option value="new store">
+                                            New Store Build
+                                        </option>
+                                        <option value="redesign">
+                                            Store Redesign
+                                        </option>
+                                        <option value="deconetwork setup">
+                                            DecoNetwork Setup
+                                        </option>
+                                        <option value="integrations">
+                                            App Integrations
+                                        </option>
+                                        <option value="seo">
+                                            SEO & Performance
+                                        </option>
+                                        <option value="consultation">
+                                            Free Consultation
+                                        </option>
+                                    </select>
+                                </div>
+                                <span class="sr-only" id="enquiry-help">
+                                    Choose the topic of your enquiry
+                                </span>
+                            </div>
+                            <!-- Project Budget -->
+                            <div>
+                                <label class="block text-white text-sm font-medium mb-2" for="project-budget">
+                                    Project Budget
+                                </label>
+                                <div class="relative">
+                                    <select class="select-global" id="project-budget" name="project-budget">
+                                        <option disabled="" hidden="" selected="" value="">
+                                            Select Option
+                                        </option>
+                                        <option value="less than 1k">
+                                            Less than $1,000
+                                        </option>
+                                        <option value="1k 3k">
+                                            $1,000 - $3,000
+                                        </option>
+                                        <option value="3k 5k">
+                                            $3,000 - $5,000
+                                        </option>
+                                        <option value="5k plus">
+                                            $5,000+
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Message -->
+                            <div>
+                                <label class="block text-white text-sm font-medium mb-2" for="message">
+                                    Message
+                                </label>
+                                <div class="relative">
+                                    <textarea class="input-global" id="message" name="message"
+                                        placeholder="Tell us about your current store and what you'd like to achieve..." rows="4"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Honeypot field (bots will fill this) -->
+                            <div style="display:none;">
+                                <label>Empty</label>
+                                <input type="text" name="company" tabindex="-1" autocomplete="off">
+                            </div>
+
+                            <!-- Captcha -->
+                            <input type="hidden" name="recaptcha_token" id="recaptcha_token">
+
+                            <!-- Send Enquiry Button -->
+                            <button aria-label="Send enquiry"
+                                class="group inline-flex items-center gap-4 rounded-full bg-green text-dark pl-6 pr-2 py-2 font-bold capitalize shadow-lg transition-all duration-300 hover:bg-transparent hover:text-green hover:border-green border-green border focus:outline-none !mt-6"
+                                type="submit">
+                                Send Enquiry
+                                <span
+                                    class="flex h-10 w-10 items-center justify-center rounded-full text-green bg-[#201F1E] transition duration-300 group-hover:bg-green group-hover:text-dark">
+                                    <i class="fa-solid fa-arrow-up"></i>
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer (Glass card over image) -->
+        <footer class="relative bg-cover bg-center md:pt-24 pt-12 pb-12">
+            <div class="container mx-auto rounded-2xl overflow-hidden p-10 bg-[rgba(255,255,255,0.06)]">
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 md-gap-10 lg:gap-12 relative z-10">
+                    <div class="lg:col-span-2">
+                        <a href="decostorepros.html" class="inline-block">
+                            <img alt="DecoStorePros logo" class="max-w-[183px] mb-4" decoding="async" height="34"
+                                loading="lazy" src="./assets/images/logo.svg" width="183" />
+                        </a>
+                        <div class="max-w-md">
+                            <h3 class="text-white text-base font-body font-semibold mb-2">
+                                Want tips on growing your apparel store?
+                            </h3>
+                            <p class="text-white text-sm mb-6">
+                                Join our list for free DecoNetwork tips, conversion strategies,
+                                and store growth updates.
+                            </p>
+                            <form aria-label="Newsletter signup" class="space-y-4" novalidate>
+
+                                <!-- First & Last Name -->
+                                <div class="flex flex-col sm:flex-row gap-3">
+
+                                    <!-- First Name -->
+                                    <div class="flex-1">
+                                        <label class="block text-white text-sm font-medium mb-2" for="newsletter-first">
+                                            First Name
+                                        </label>
+                                        <input class="input-global" id="newsletter-first" name="first-name"
+                                            placeholder="First Name" type="text" />
+                                    </div>
+
+                                    <!-- Surname -->
+                                    <div class="flex-1 sm:max-w-[220px]">
+                                        <label class="block text-white text-sm font-medium mb-2" for="newsletter-last">
+                                            Last Name
+                                        </label>
+                                        <input class="input-global" id="newsletter-last" name="last-name"
+                                            placeholder="Last Name" type="text" />
+                                    </div>
+
+                                </div>
+
+                                <!-- Email + Button -->
+                                <div class="flex items-stretch gap-3 max-w-lg relative">
+                                    <label class="sr-only" for="newsletter-email">
+                                        Email Address
+                                    </label>
+                                    <input class="input-global" id="newsletter-email" placeholder="Email Address"
+                                        type="email" />
+                                    <button aria-label="Subscribe to newsletter" class="cta-arrow absolute right-2 top-2 bottom-2 w-10 rounded-xs
+                                            bg-white text-dark flex items-center justify-center
+                                            ring-1 ring-white/20 hover:bg-blue hover:text-dark transition">
+                                        <span class="icon-swap-x">
+                                            <!-- Default icon -->
+                                            <span class="icon-default">
+                                                <i class="fa-solid fa-arrow-right"></i>
+                                            </span>
+                                            <!-- Hover icon -->
+                                            <span class="icon-hover">
+                                                <i class="fa-solid fa-arrow-right"></i>
+                                            </span>
+                                        </span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="relative max-md:border-b max-md:border-t max-md:border-white/30 max-md:py-3 max-md:first:border-t max-md:first:border-white/14 md:border-0 md:p-0 group max-md:[&.is-open]:pb-6"
+                        data-footer-section>
+                        <button
+                            class="w-full flex items-center justify-between gap-3 bg-transparent border-0 p-0 text-left text-white text-lg font-bold cursor-pointer focus-visible:outline-2 focus-visible:outline-[rgba(93,216,255,0.8)] focus-visible:outline-offset-4 md:p-0"
+                            type="button" aria-expanded="false" data-footer-toggle>
+                            <span>
+                                Services
+                            </span>
+                            <span
+                                class="inline-flex items-center justify-center text-white transition-colors duration-300 md:hidden  group-[.is-open]:border-[rgba(0,212,255,0.4)]"
+                                aria-hidden="true">
+                                <i
+                                    class="fa-solid fa-chevron-down transition-transform duration-300 text-xs leading-none group-[.is-open]:rotate-180"></i>
+                            </span>
+                        </button>
+                        <div class="transition-all duration-300 max-md:max-h-0 max-md:opacity-0 max-md:pointer-events-none max-md:pt-0 md:max-h-none md:opacity-100 md:pointer-events-auto md:pt-4 group-[.is-open]:max-md:max-h-[600px] group-[.is-open]:max-md:opacity-100 group-[.is-open]:max-md:pointer-events-auto group-[.is-open]:max-md:pt-3"
+                            data-footer-panel>
+                            <ul class="space-y-2 text-white/70 text-sm">
+                                <li>
+                                    <a class="hover:text-white transition-colors" href="#services">
+                                        Custom Apparel Websites
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="hover:text-white transition-colors" href="#services">
+                                        DecoNetwork Setup
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="hover:text-white transition-colors" href="#services">
+                                        eCommerce Optimisation
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="hover:text-white transition-colors" href="#services">
+                                        SEO &amp; Performance
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="hover:text-white transition-colors" href="#services">
+                                        App Integrations
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="relative max-md:-mt-5 max-md:border-b max-md:border-white/30 max-md:py-3 md:border-0 md:p-0 group max-md:[&.is-open]:pb-6"
+                        data-footer-section>
+                        <button
+                            class="w-full flex items-center justify-between gap-3 bg-transparent border-0 p-0 text-left text-white text-lg font-bold cursor-pointer focus-visible:outline-2 focus-visible:outline-[rgba(93,216,255,0.8)] focus-visible:outline-offset-4 md:p-0"
+                            type="button" aria-expanded="false" data-footer-toggle>
+                            <span>
+                                Company
+                            </span>
+                            <span
+                                class="inline-flex items-center justify-center text-white transition-colors duration-300 md:hidden  group-[.is-open]:border-[rgba(0,212,255,0.4)]"
+                                aria-hidden="true">
+                                <i
+                                    class="fa-solid fa-chevron-down transition-transform duration-300 text-xs leading-none group-[.is-open]:rotate-180"></i>
+                            </span>
+                        </button>
+                        <div class="transition-all duration-300 max-md:max-h-0 max-md:opacity-0 max-md:pointer-events-none max-md:pt-0 md:max-h-none md:opacity-100 md:pointer-events-auto md:pt-4 group-[.is-open]:max-md:max-h-[600px] group-[.is-open]:max-md:opacity-100 group-[.is-open]:max-md:pointer-events-auto group-[.is-open]:max-md:pt-3"
+                            data-footer-panel>
+                            <ul class="space-y-2 text-white/70 text-sm">
+                                <li>
+                                    <a class="hover:text-white transition-colors" href="#">
+                                        About Us
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="hover:text-white transition-colors" href="#">
+                                        Contact Us
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="relative max-md:-mt-5 max-md:border-b max-md:border-white/30 max-md:py-3 md:border-0 md:p-0 lg:col-span-1 group max-md:[&.is-open]:pb-6"
+                        data-footer-section>
+                        <button
+                            class="w-full flex items-center justify-between gap-3 bg-transparent border-0 p-0 text-left text-white text-lg font-bold cursor-pointer focus-visible:outline-2 focus-visible:outline-[rgba(93,216,255,0.8)] focus-visible:outline-offset-4 md:p-0"
+                            type="button" aria-expanded="false" data-footer-toggle>
+                            <span>
+                                Get in Touch
+                            </span>
+                            <span
+                                class="inline-flex items-center justify-center text-white transition-colors duration-300 md:hidden  group-[.is-open]:border-[rgba(0,212,255,0.4)]"
+                                aria-hidden="true">
+                                <i
+                                    class="fa-solid fa-chevron-down transition-transform duration-300 text-xs leading-none group-[.is-open]:rotate-180"></i>
+                            </span>
+                        </button>
+                        <div class="transition-all duration-300 max-md:max-h-0 max-md:opacity-0 max-md:pointer-events-none max-md:pt-0 md:max-h-none md:opacity-100 md:pointer-events-auto md:pt-4 group-[.is-open]:max-md:max-h-[600px] group-[.is-open]:max-md:opacity-100 group-[.is-open]:max-md:pointer-events-auto group-[.is-open]:max-md:pt-3"
+                            data-footer-panel>
+                            <div class="space-y-3 text-white/90 text-sm">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-6 h-6 rounded-sm bg-white/70">
+                                    </span>
+                                    <span>
+                                        hi@decostorepros.com
+                                    </span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="w-6 h-6 rounded-sm bg-white/70">
+                                    </span>
+                                    <span>
+                                        +1 (800) 000-0000
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:h-px bg-white/20 my-6 md:my-8 lg:my-10 relative z-10"></div>
+                <div
+                    class="flex flex-col md:flex-row items-center justify-center md:justify-between gap-4 text-center md:text-left relative z-10">
+                    <div class="text-sm font-medium">
+                        Copyright ©
+                        <time datetime="2026">
+                            2026
+                        </time>
+                        DecoStorePros - All Rights Reserved.
+                    </div>
+                    <div class="flex items-center justify-center gap-3 md:mt-0">
+
+                        <a aria-label="Dribbble" class="social-btn w-10 h-10 rounded-md bg-white text-dark
+                                      flex items-center justify-center hover:bg-blue transition" href="#">
+                            <span class="icon-swap">
+                                <span class="icon-default">
+                                    <i class="fa-brands fa-dribbble"></i>
+                                </span>
+                                <span class="icon-hover">
+                                    <i class="fa-brands fa-dribbble"></i>
+                                </span>
+                            </span>
+                        </a>
+
+                        <a aria-label="Behance"
+                            class="social-btn w-10 h-10 rounded-md bg-white text-dark flex items-center justify-center hover:bg-blue transition"
+                            href="#">
+                            <span class="icon-swap">
+                                <span class="icon-default"><i class="fa-brands fa-behance"></i></span>
+                                <span class="icon-hover"><i class="fa-brands fa-behance"></i></span>
+                            </span>
+                        </a>
+
+                        <a aria-label="Instagram"
+                            class="social-btn w-10 h-10 rounded-md bg-white text-dark flex items-center justify-center hover:bg-blue transition"
+                            href="#">
+                            <span class="icon-swap">
+                                <span class="icon-default"><i class="fa-brands fa-instagram"></i></span>
+                                <span class="icon-hover"><i class="fa-brands fa-instagram"></i></span>
+                            </span>
+                        </a>
+
+                        <a aria-label="LinkedIn"
+                            class="social-btn w-10 h-10 rounded-md bg-white text-dark flex items-center justify-center hover:bg-blue transition"
+                            href="#">
+                            <span class="icon-swap">
+                                <span class="icon-default"><i class="fa-brands fa-linkedin-in"></i></span>
+                                <span class="icon-hover"><i class="fa-brands fa-linkedin-in"></i></span>
+                            </span>
+                        </a>
+
+                        <a aria-label="X Twitter"
+                            class="social-btn w-10 h-10 rounded-md bg-white text-dark flex items-center justify-center hover:bg-blue transition"
+                            href="#">
+                            <span class="icon-swap">
+                                <span class="icon-default"><i class="fa-brands fa-x-twitter"></i></span>
+                                <span class="icon-hover"><i class="fa-brands fa-x-twitter"></i></span>
+                            </span>
+                        </a>
+
+                        <a aria-label="Facebook"
+                            class="social-btn w-10 h-10 rounded-md bg-white text-dark flex items-center justify-center hover:bg-blue transition"
+                            href="#">
+                            <span class="icon-swap">
+                                <span class="icon-default"><i class="fa-brands fa-facebook-f"></i></span>
+                                <span class="icon-hover"><i class="fa-brands fa-facebook-f"></i></span>
+                            </span>
+                        </a>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+        </footer>
+    </main>
+
+    <video autoplay muted loop playsinline crossorigin="anonymous" class="
+      absolute
+      top-0
+      left-1/2
+      w-screen
+      h-screen
+      -translate-x-1/2
+      object-cover
+      -z-[3]
+      pointer-events-none
+      opacity-25
+      [mask-image:linear-gradient(to_top,transparent,#000_50%)]
+      [-webkit-mask-image:linear-gradient(to_top,transparent,#000_50%)]
+    ">
+        <source media="(min-width: 768px)" type="video/mp4"
+            src="https://files.peachworlds.com/website/86f44a38-0813-4f42-a8b3-4250e1c39460/water2.mp4" />
+        Your browser does not support the video tag.
+    </video>
+
+
+
+
+    <div class="bg-body-pattren bg-cover bg-center bg-no-repeat fixed inset-0 z-[-1] opacity-50"></div>
+
+    </div>
+
+    <!-- Mobile Offcanvas Menu -->
+    <aside aria-hidden="true" aria-labelledby="mobile-menu-title" aria-modal="true" id="mobile-offcanvas" role="dialog"
+        class="fixed inset-x-0 top-0 h-[calc(100vh-70px)] bg-blue2
+           text-white transform translate-y-[60px] opacity-0 pointer-events-none
+           transition-all duration-500 z-50 shadow-xl flex flex-col">
+
+        <nav class="px-4 py-4 overflow-y-auto">
+            <ul class="space-y-2">
+                <li>
+                    <a class="block px-3 py-2 rounded hover:bg-white/10 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-blue"
+                        href="#why-us">Why Us</a>
+                </li>
+                <li>
+                    <a class="block px-3 py-2 rounded hover:bg-white/10 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-blue"
+                        href="#services">Services</a>
+                </li>
+                <li>
+                    <a class="block px-3 py-2 rounded hover:bg-white/10 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-blue"
+                        href="#process">Process</a>
+                </li>
+                <li>
+                    <a class="block px-3 py-2 rounded hover:bg-white/10 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-blue"
+                        href="#results">Results</a>
+                </li>
+                <li>
+                    <a class="block px-3 py-2 rounded hover:bg-white/10 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-blue"
+                        href="#faq">FAQ</a>
+                </li>
+                <li>
+                    <a class="block px-3 py-2 rounded hover:bg-white/10 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-blue"
+                        href="#contact">Contact Us</a>
+                </li>
+                <li class="px-3">
+                    <a href="#contact" class="cta-call w-full inline-flex items-center justify-center rounded-xs bg-green text-dark text-xs
+                    px-6 py-3 transition font-medium" role="button">
+                        <span class="ml-3">Get Your Free Audit</span>
+                    </a>
+                </li>
+            </ul>
+
+
+
+        </nav>
+    </aside>
+
+    <!-- Bottom Right Figma Link -->
+    <div role="complementary" aria-label="Figma shortcut">
+        <a aria-label="Open Figma" class="figma-fab" href="#" target="_blank">
+            <span
+                class="figma-fab-inner w-[50px] h-[50px] items-center flex justify-center bg-blue2 text-white rounded-full">
+                <i class="fa-brands fa-figma text-xl icon-default"></i>
+                <i class="fa-solid fa-play text-xl icon-hover"></i>
+            </span>
+        </a>
+    </div>
+
+
+    <!-- Cookie Consent Popup -->
+    <div class="fixed bottom-6 left-6 bg-white text-dark rounded-xl shadow-2xl p-5 w-[360px] border border-gray-200 z-50 hidden opacity-0 translate-y-3 transition-all duration-500 ease-out"
+        id="cookie-popup">
+        <!-- Main Header -->
+        <h2 class="text-dark font-bold mb-2 text-base">
+            Cookie Settings
+        </h2>
+        <p class="text-sm mb-4 text-gray-600">
+            We use cookies to enhance your experience, analyze site traffic and deliver personalized content.
+            Read our
+            <a class="text-gray-500 hover:text-black" href="#">
+                Cookie Policy
+            </a>
+            .
+        </p>
+        <!-- Main Buttons -->
+        <div class="flex justify-between items-center gap-2" id="cookie-main-buttons">
+            <button class="text-sm px-3 py-2 bg-gray-200 hover:bg-gray-300 text-dark rounded flex-1" id="cookie-reject">
+                Reject All
+            </button>
+            <button class="text-sm bg-black text-white px-3 py-2 rounded hover:bg-gray-900 flex-1"
+                id="cookie-customize">
+                Customize
+            </button>
+            <button class="text-sm bg-black text-white px-3 py-2 rounded hover:bg-gray-900 flex-1" id="cookie-accept">
+                Accept All
+            </button>
+        </div>
+        <!-- Hidden Customize Panel -->
+        <div class="hidden mt-3 space-y-4" id="cookie-custom-panel">
+            <div class="space-y-2">
+                <!-- ✅ Essential (Always Active, Non-toggleable) -->
+                <div class="flex items-center justify-between bg-gray-100 rounded-xl p-3">
+                    <div>
+                        <h4 class="font-semibold text-sm text-dark mb-1">
+                            Essential
+                        </h4>
+                        <p class="text-xs text-gray-600">
+                            Enables security and basic functionality.
+                        </p>
+                    </div>
+                    <div class="relative inline-flex items-center cursor-not-allowed opacity-90 select-none">
+                        <input aria-label="Essential cookies always enabled" checked="" class="sr-only" disabled=""
+                            type="checkbox" />
+                        <div class="w-10 h-5 bg-black rounded-full">
+                        </div>
+                        <div
+                            class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transform translate-x-5">
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between bg-gray-100 rounded-xl p-3">
+                    <div>
+                        <h4 class="font-semibold text-sm text-dark mb-1">
+                            Analytics
+                        </h4>
+                        <p class="text-xs text-gray-600">
+                            Enables tracking of performance.
+                        </p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input class="sr-only peer" id="cookie-analytics" type="checkbox" />
+                        <div
+                            class="w-10 h-5 bg-gray-300 peer-focus:ring-1 peer-focus:ring-gray-400 rounded-full peer-checked:bg-black transition-colors">
+                        </div>
+                        <div
+                            class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5">
+                        </div>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between bg-gray-100 rounded-xl p-3">
+                    <div>
+                        <h4 class="font-semibold text-sm text-dark mb-1">
+                            Marketing
+                        </h4>
+                        <p class="text-xs text-gray-600">
+                            Enables ads personalization and tracking.
+                        </p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input class="sr-only peer" id="cookie-marketing" type="checkbox" />
+                        <div
+                            class="w-10 h-5 bg-gray-300 peer-focus:ring-1 peer-focus:ring-gray-400 rounded-full peer-checked:bg-black transition-colors">
+                        </div>
+                        <div
+                            class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5">
+                        </div>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between bg-gray-100 rounded-xl p-3">
+                    <div>
+                        <h4 class="font-semibold text-sm text-dark mb-1">
+                            Functional
+                        </h4>
+                        <p class="text-xs text-gray-600">
+                            Enables ads personalization and tracking.
+                        </p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input class="sr-only peer" id="cookie-functional" type="checkbox" />
+                        <div
+                            class="w-10 h-5 bg-gray-300 peer-focus:ring-1 peer-focus:ring-gray-400 rounded-full peer-checked:bg-black transition-colors">
+                        </div>
+                        <div
+                            class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5">
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <!-- Save Button -->
+            <button class="w-full mt-3 bg-black text-white text-sm py-2 rounded hover:bg-gray-900" id="cookie-save">
+                Save Preferences
+            </button>
+        </div>
+    </div>
+    <!-- ✅ Cookie Settings Floating Button -->
+    <button aria-label="Cookie settings" class="fixed bottom-6 left-6 z-40 mix-blend-difference"
+        id="cookie-settings-btn">
+        <svg fill="white" height="24" viewbox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M164.49,163.51a12,12,0,1,1-17,0A12,12,0,0,1,164.49,163.51Zm-81-8a12,12,0,1,0,17,0A12,12,0,0,0,83.51,155.51Zm9-39a12,12,0,1,0-17,0A12,12,0,0,0,92.49,116.49Zm48-1a12,12,0,1,0,0,17A12,12,0,0,0,140.49,115.51ZM232,128A104,104,0,1,1,128,24a8,8,0,0,1,8,8,40,40,0,0,0,40,40,8,8,0,0,1,8,8,40,40,0,0,0,40,40A8,8,0,0,1,232,128Zm-16.31,7.39A56.13,56.13,0,0,1,168.5,87.5a56.13,56.13,0,0,1-47.89-47.19,88,88,0,1,0,95.08,95.08Z">
+            </path>
+        </svg>
+    </button>
+
+    <div id="particles-js" class="fixed inset-0 -z-10"></div>
+
+    <!-- Custom cursor -->
+    <div id="cursorDot"></div>
+    <div id="cursorRing"></div>
+
+    <!-- Deferred JavaScript loading for better performance -->
+    <script defer="" src="./src/js/jquery-3.7.1.min.js"></script>
+    <script defer="" src="./src/slick/slick.min.js"></script>
+    <script defer="" src="./src/js/gsap.min.js"></script>
+    <script defer="" src="./src/js/ScrollTrigger.min.js"></script>
+    <script defer="" src="./src/js/interactions.js"></script>
+    <script defer="" src="./src/swiper/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script defer="" src="./dist/main.js"></script>
+    <script defer="" src="./src/js/fanout-cards-interaction.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfVJCMsAAAAAPbytxWnxuX9LZocp6khbBjajLfc"></script>
+    <script>
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6LfVJCMsAAAAAPbytxWnxuX9LZocp6khbBjajLfc', { action: 'contact' }).then(function (token) {
+                document.getElementById('recaptcha_token').value = token;
+            });
+        });
+    </script>
+    <script defer="" src="./src/js/common.js"></script>
+    <script>
+        // FAQ Accordion
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('[data-faq-toggle]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var panel = btn.nextElementSibling;
+                    var icon = btn.querySelector('i');
+                    var isOpen = btn.getAttribute('aria-expanded') === 'true';
+                    // Close all
+                    document.querySelectorAll('[data-faq-toggle]').forEach(function (b) {
+                        b.setAttribute('aria-expanded', 'false');
+                        b.nextElementSibling.style.maxHeight = '0px';
+                        var ic = b.querySelector('i');
+                        ic.style.transform = 'rotate(0deg)';
+                    });
+                    // Open clicked if it was closed
+                    if (!isOpen) {
+                        btn.setAttribute('aria-expanded', 'true');
+                        panel.style.maxHeight = panel.scrollHeight + 'px';
+                        icon.style.transform = 'rotate(45deg)';
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+<!-- Project Modal -->
+<div id="projectModal" class="project-modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-card" id="modalCard">
+        <button class="modal-close-btn" id="modalClose" aria-label="Close modal">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="modal-img-wrap">
+            <img id="modalImage" src="" alt="">
+        </div>
+
+        <div class="modal-body">
+            <!-- Tags + CTA -->
+            <div class="modal-header-row">
+                <div class="modal-tags" id="modalTags"></div>
+                <a class="modal-cta" id="modalLink" href="#" target="_blank" rel="noreferrer">
+                    Visit Site <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- About the project -->
+            <div class="modal-about">
+                <div class="modal-section-label">
+                    <span class="modal-section-num">01</span>
+                    <span class="modal-section-title">About the project</span>
+                </div>
+                <p class="modal-about-text" id="modalAbout"></p>
+            </div>
+
+            <!-- Industry / Services / Audience table -->
+            <div class="modal-table">
+                <div class="modal-table-row">
+                    <span class="modal-table-key">Industry</span>
+                    <span class="modal-table-val" id="modalIndustry"></span>
+                </div>
+                <div class="modal-table-row">
+                    <span class="modal-table-key">Services</span>
+                    <span class="modal-table-val" id="modalServices"></span>
+                </div>
+                <div class="modal-table-row">
+                    <span class="modal-table-key">Audience</span>
+                    <span class="modal-table-val" id="modalAudience"></span>
+                </div>
+            </div>
+
+            <!-- Project Details -->
+            <div class="modal-details">
+                <h4 class="modal-details-title">Project Details</h4>
+                <ol class="modal-details-list" id="modalDetails"></ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

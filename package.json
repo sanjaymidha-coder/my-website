@@ -1,0 +1,33 @@
+{
+  "name": "codeller-landing",
+  "version": "1.0.0",
+  "description": "CODELLER Digital Product Agency Landing Page",
+  "main": "index.html",
+  "scripts": {
+    "watch:css": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
+    "build:css": "tailwindcss -i ./src/input.css -o ./dist/output.css --minify",
+    "build:js": "node build.js",
+    "build:images": "node src/js/optimize-images.js",
+    "build": "npm run build:css && npm run build:js && npm run build:images",
+    "serve": "browser-sync start --server --files \"*.html, dist/**/*\" --no-notify",
+    "dev": "npm-run-all --parallel watch:css watch:js serve",
+    "watch:js": "node --no-warnings -e \"require('esbuild').context({entryPoints:['src/js/main.js'],bundle:true,outfile:'dist/main.js',sourcemap:true}).then(ctx=>ctx.watch()).catch(()=>process.exit(1))\""
+  },
+  "keywords": [
+    "landing-page",
+    "tailwindcss",
+    "responsive"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^3.0.4",
+    "esbuild": "^0.27.0",
+    "npm-run-all": "^4.1.5",
+    "sharp": "^0.34.4",
+    "tailwindcss": "^3.4.17"
+  },
+  "dependencies": {
+    "watch": "^1.0.2"
+  }
+}
