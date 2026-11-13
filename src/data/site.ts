@@ -32,6 +32,7 @@ export const brands: Record<Brand, BrandConfig> = {
     home: "/",
     nav: [
       { label: "Why Codeller", href: "/#growth" },
+      { label: "Work", href: "/work" },
       { label: "How We Work", href: "/#how-we-work" },
       { label: "Services", href: "/services" },
       { label: "Contact Us", href: "/#contact" },
@@ -52,6 +53,7 @@ export const brands: Record<Brand, BrandConfig> = {
         title: "Company",
         links: [
           { label: "About Us", href: "/#growth" },
+          { label: "Case Studies", href: "/work" },
           { label: "Contact Us", href: "/#contact" },
         ],
       },

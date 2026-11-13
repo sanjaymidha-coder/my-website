@@ -8,6 +8,16 @@ import { Process } from "@/components/sections/Process";
 import { StepCards, SkillsMarquee, MoonCta } from "@/components/sections/Misc";
 import { Contact } from "@/components/sections/Contact";
 import { brands, growthItems } from "@/data/site";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { organizationJsonLd, pageMetadata, professionalServiceJsonLd, websiteJsonLd } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Codeller | UX & Web Design Agency for Startups",
+  absoluteTitle: true,
+  description:
+    "Codeller is a UX and web design agency helping startups and growing teams turn complex ideas into clear, high-converting websites and digital products.",
+  path: "/",
+});
 import { codellerServices, codellerSkills } from "@/data/services";
 import { codellerProcess, howWeWork } from "@/data/process";
 
@@ -15,6 +25,7 @@ export default function HomePage() {
   const brand = brands.codeller;
   return (
     <>
+      <JsonLd data={[organizationJsonLd, websiteJsonLd, professionalServiceJsonLd]} />
       <Hero
         eyebrow="Digital product agency"
         title="We design and build products people *instantly* understand."
@@ -25,7 +36,7 @@ export default function HomePage() {
         <LogoMarquee label="Previously worked with" />
       </Hero>
 
-      <Projects id="work" eyebrow="Selected work" title="Our *Latest* projects" />
+      <Projects id="work" eyebrow="Selected work" title="Our *Latest* projects" caseStudies />
 
       <ServicesList id="services" rowA={["What We Do", "Our Services"]} items={codellerServices} />
 

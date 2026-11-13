@@ -11,23 +11,19 @@ import { ArrowRight } from "@/components/ui/Icons";
 import { projects } from "@/data/projects";
 import type { Project } from "@/data/types";
 import { ProjectModal } from "./ProjectModal";
+import { TransitionLink } from "@/components/providers/PageTransition";
 
-function ProjectCard({ p, index, onOpen }: { p: Project; index: number; onOpen: (p: Project) => void }) {
-  return (
-    <TiltCard className="h-full">
-      <button
-        type="button"
-        onClick={() => onOpen(p)}
-        data-cursor="card"
-        data-cursor-color={p.cursorColor}
-        data-cursor-text={p.cursorText}
-        className="group block h-full w-full text-left"
-        aria-label={`View ${p.name} project details`}
-      >
+/**
+ * A project card. With `href` it's a real, crawlable link to the case-study page;
+ * otherwise (DecoStorePros page) it opens the details modal.
+ */
+export function ProjectCard({ p, index, onOpen, href }: { p: Project; index: number; onOpen?: (p: Project) => void; href?: string }) {
+  const inner = (
+    <>
         <div data-reveal className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-white/10">
           <Image
             src={p.image}
-            alt={p.name}
+            alt={`${p.name} website designed by Codeller`}
             fill
             sizes="(max-width: 768px) 85vw, 42vw"
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
@@ -46,7 +42,25 @@ function ProjectCard({ p, index, onOpen }: { p: Project; index: number; onOpen: 
             </span>
           </div>
         </div>
-      </button>
+    </>
+  );
+  const common = {
+    "data-cursor": "card",
+    "data-cursor-color": p.cursorColor,
+    "data-cursor-text": p.cursorText,
+    className: "group block h-full w-full text-left",
+  } as const;
+  return (
+    <TiltCard className="h-full">
+      {href ? (
+        <TransitionLink href={href} {...common} aria-label={`${p.name} case study`}>
+          {inner}
+        </TransitionLink>
+      ) : (
+        <button type="button" onClick={() => onOpen?.(p)} {...common} aria-label={`View ${p.name} project details`}>
+          {inner}
+        </button>
+      )}
     </TiltCard>
   );
 }
@@ -56,7 +70,20 @@ function ProjectCard({ p, index, onOpen }: { p: Project; index: number; onOpen: 
  * Desktop: pinned horizontal scroll, each card's image revealed with a clip-path as it enters.
  * Mobile / reduced motion: a Swiper carousel.
  */
-export function Projects({ id, eyebrow, title, body }: { id?: string; eyebrow: string; title: string; body?: string }) {
+export function Projects({
+  id,
+  eyebrow,
+  title,
+  body,
+  caseStudies = false,
+}: {
+  id?: string;
+  eyebrow: string;
+  title: string;
+  body?: string;
+  /** Link cards to /work/[slug] (Codeller) instead of opening the modal. */
+  caseStudies?: boolean;
+}) {
   const root = useRef<HTMLElement>(null);
   const [active, setActive] = useState<Project | null>(null);
   const close = useCallback(() => setActive(null), []);
@@ -122,7 +149,7 @@ export function Projects({ id, eyebrow, title, body }: { id?: string; eyebrow: s
           </div>
           {projects.map((p, i) => (
             <div key={p.id} data-hcard className={`w-[42vw] max-w-[720px] shrink-0 ${i % 2 ? "mt-24" : "-mt-24"}`}>
-              <ProjectCard p={p} index={i} onOpen={setActive} />
+              <ProjectCard p={p} index={i} onOpen={setActive} href={caseStudies ? `/work/${p.id}` : undefined} />
             </div>
           ))}
         </div>
@@ -147,7 +174,7 @@ export function Projects({ id, eyebrow, title, body }: { id?: string; eyebrow: s
           >
             {projects.map((p, i) => (
               <SwiperSlide key={p.id}>
-                <ProjectCard p={p} index={i} onOpen={setActive} />
+                <ProjectCard p={p} index={i} onOpen={setActive} href={caseStudies ? `/work/${p.id}` : undefined} />
               </SwiperSlide>
             ))}
           </Swiper>

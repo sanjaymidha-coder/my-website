@@ -135,3 +135,47 @@ export const projects: Project[] = [
     cursorText: "#fff",
   },
 ];
+
+/**
+ * Extra case-study content that the original site didn't have.
+ * TODO(Rehan): fill these in with real information. Leave a field as `null` / `[]`
+ * and that section is simply hidden on the case-study page — nothing fake is shown.
+ */
+/** US-English meta descriptions (≤155 chars) for the case-study pages. */
+export const caseStudyMeta: Record<string, string> = {
+  jannah:
+    "See how Codeller designed a premium brand website for Jannah, a basmati rice exporter, built to win the trust of global importers and distributors.",
+  gisteo:
+    "How Codeller designed a clear, conversion-focused website for Gisteo, a B2B marketing and video production studio that turns complex ideas into stories.",
+  syance:
+    "How Codeller built a bold, high-performance website for SYANCE, a data-driven performance marketing agency, designed to drive high-intent leads.",
+  treedefi:
+    "How Codeller designed a credible Web3 platform for TreeDeFi, a DeFi project that funds reforestation through tokenized assets.",
+  firmable:
+    "How Codeller designed a scalable B2B SaaS website for Firmable, Australia's leading business data platform, built to drive trial sign-ups.",
+  followthecamino:
+    "How Codeller designed an immersive travel website for Follow the Camino, a guided Camino de Santiago tour operator, built to drive bookings.",
+  plannerdao:
+    "How Codeller designed a modern Web3 platform for PlannerDAO, a decentralized organization reimagining how events are planned and funded.",
+};
+
+export interface CaseStudyExtras {
+  /** TODO: real, measurable outcomes (e.g. "Conversion rate up 32% in 3 months"). */
+  results: string[];
+  /** TODO: a real client quote, with permission. */
+  testimonial: { quote: string; author: string; role: string } | null;
+  /** TODO: extra screenshots (put files in public/assets/images/work/). The main image is always shown. */
+  gallery: string[];
+}
+
+export const caseStudyExtras: Record<string, CaseStudyExtras> = {
+  jannah: { results: [], testimonial: null, gallery: [] }, // TODO
+  gisteo: { results: [], testimonial: null, gallery: [] }, // TODO
+  syance: { results: [], testimonial: null, gallery: [] }, // TODO
+  treedefi: { results: [], testimonial: null, gallery: [] }, // TODO
+  firmable: { results: [], testimonial: null, gallery: [] }, // TODO
+  followthecamino: { results: [], testimonial: null, gallery: [] }, // TODO
+  plannerdao: { results: [], testimonial: null, gallery: [] }, // TODO
+};
+
+export const getProject = (id: string) => projects.find((p) => p.id === id);
