@@ -2,7 +2,7 @@ import type { ServiceItem } from "./types";
 
 export const codellerServices: ServiceItem[] = [
   { title: "Web design", image: "/assets/images/webdev.webp", href: "/services" },
-  { title: "Logo design", image: "/assets/images/kickoff-img1.webp", href: "/services" },
+  { title: "Logo design", image: "/assets/images/work/jannah-thumbnail.webp", href: "/services" },
   { title: "SEO", image: "/assets/images/dashboard.webp", href: "/services" },
   { title: "Marketing", image: "/assets/images/design-growth/higher-conversion.webp", href: "/services" },
 ];
@@ -12,7 +12,7 @@ export const decoServices: ServiceItem[] = [
   { title: "DecoNetwork Setup & Integration", image: "/assets/images/dashboard.webp", href: "/decostorepros#contact" },
   { title: "eCommerce & Checkout Optimisation", image: "/assets/images/design-growth/higher-conversion.webp", href: "/decostorepros#contact" },
   { title: "SEO & Performance Optimisation", image: "/assets/images/design-growth/design-systems.webp", href: "/decostorepros#contact" },
-  { title: "Third-Party App Integrations", image: "/assets/images/kickoff-img2.webp", href: "/decostorepros#contact" },
+  { title: "Third-Party App Integrations", image: "/assets/images/work/firmable-thumbnail.webp", href: "/decostorepros#contact" },
   { title: "Ongoing Support & Maintenance", image: "/assets/images/design-growth/senior-designers.webp", href: "/decostorepros#contact" },
 ];
 
@@ -53,7 +53,7 @@ export const servicePanels: ServicePanel[] = [
     body: "We design digital experiences that are intuitive, clear, and grounded in user needs. Our UX work helps organisations remove friction, reduce confusion, and create pathways that convert.",
     items: ["User Experience", "User-Centred Design", "Usability & Clarity", "Conversion-Focused UX", "Usability & Testing"],
     color: "#2536DE",
-    images: ["/assets/images/webdev.webp", "/assets/images/kickoff-img1.webp"],
+    images: ["/assets/images/webdev.webp", "/assets/images/work/gisteo-thumbnail.webp"],
   },
   {
     title: "Design Systems and Interface Clarity",
@@ -73,6 +73,6 @@ export const servicePanels: ServicePanel[] = [
       "Research & Validation",
     ],
     color: "#7A68FF",
-    images: ["/assets/images/design-growth/senior-designers.webp", "/assets/images/kickoff-img2.webp"],
+    images: ["/assets/images/design-growth/senior-designers.webp", "/assets/images/work/syance-thumbnail.webp"],
   },
 ];

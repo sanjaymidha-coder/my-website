@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { gsap, useGSAP, MQ } from "@/lib/gsap";
 import { Marquee } from "@/components/ui/Marquee";
 import { TransitionLink } from "@/components/providers/PageTransition";
@@ -17,36 +18,88 @@ interface Props {
 /** Giant two-row marquee title + hover list with an image that follows the cursor. */
 export function ServicesList({ id, rowA, items }: Props) {
   const root = useRef<HTMLElement>(null);
+  const floatRef = useRef<HTMLDivElement>(null);
+  // The preview is portalled to <body> (position: fixed) so no row/section can clip it.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add(`${MQ.finePointer} and ${MQ.motion}`, () => {
         const list = root.current?.querySelector<HTMLElement>("[data-list]");
-        const float = root.current?.querySelector<HTMLElement>("[data-float]");
+        const float = floatRef.current;
         if (!list || !float) return;
         const imgs = gsap.utils.toArray<HTMLElement>("[data-float-img]", float);
-        gsap.set(float, { xPercent: -50, yPercent: -50, scale: 0.6, autoAlpha: 0 });
-        const xTo = gsap.quickTo(float, "x", { duration: 0.6, ease: "power3.out" });
-        const yTo = gsap.quickTo(float, "y", { duration: 0.6, ease: "power3.out" });
-        const rTo = gsap.quickTo(float, "rotation", { duration: 0.8, ease: "power3.out" });
+        const W = 320;
+        const H = 240;
+        const GAP = 36; // distance from the cursor so the title stays readable
+
+        gsap.set(float, { x: -9999, y: -9999, autoAlpha: 0, scale: 0.85, rotation: 0 });
+        gsap.set(imgs, { clipPath: "inset(100% 0% 0% 0%)", zIndex: 0 });
+
+        const xTo = gsap.quickTo(float, "x", { duration: 0.5, ease: "power3.out" });
+        const yTo = gsap.quickTo(float, "y", { duration: 0.5, ease: "power3.out" });
+        const rTo = gsap.quickTo(float, "rotation", { duration: 0.7, ease: "power3.out" });
         let lastX = 0;
+        let active = -1;
+        let visible = false;
+
+        const target = (e: PointerEvent) => {
+          // Sit to the right of the cursor; flip to the left near the right edge.
+          const right = e.clientX + GAP + W < window.innerWidth;
+          return {
+            x: right ? e.clientX + GAP : e.clientX - GAP - W,
+            y: gsap.utils.clamp(8, window.innerHeight - H - 8, e.clientY - H / 2),
+          };
+        };
 
         const move = (e: PointerEvent) => {
-          const r = list.getBoundingClientRect();
-          const x = e.clientX - r.left;
-          xTo(x);
-          yTo(e.clientY - r.top);
-          rTo(gsap.utils.clamp(-12, 12, (x - lastX) * 0.6));
-          lastX = x;
+          const t = target(e);
+          if (!visible) {
+            // First frame: jump into place instead of sliding in from the last spot.
+            gsap.set(float, { x: t.x, y: t.y });
+          }
+          xTo(t.x);
+          yTo(t.y);
+          rTo(gsap.utils.clamp(-3, 3, (e.clientX - lastX) * 0.25)); // gentle tilt only
+          lastX = e.clientX;
         };
+
+        const show = () => {
+          visible = true;
+          gsap.to(float, { autoAlpha: 1, scale: 1, duration: 0.35, ease: "power3.out", overwrite: "auto" });
+        };
+
         const enterRow = (i: number) => {
-          gsap.to(float, { autoAlpha: 1, scale: 1, duration: 0.5, ease: "power3.out" });
-          imgs.forEach((img, j) =>
-            gsap.to(img, { clipPath: j === i ? "inset(0% 0% 0% 0%)" : "inset(0% 0% 100% 0%)", duration: 0.6, ease: "power3.inOut" }),
+          show();
+          if (i === active) return;
+          const prev = active;
+          active = i;
+          const img = imgs[i];
+          gsap.killTweensOf(imgs, "clipPath");
+          imgs.forEach((el, j) => gsap.set(el, { zIndex: j === i ? 2 : j === prev ? 1 : 0 }));
+          // New image wipes up over the previous one; the reveal always runs to completion.
+          gsap.fromTo(
+            img,
+            { clipPath: "inset(100% 0% 0% 0%)" },
+            {
+              clipPath: "inset(0% 0% 0% 0%)",
+              duration: 0.45,
+              ease: "power3.out",
+              onComplete: () => {
+                imgs.forEach((el, j) => j !== i && gsap.set(el, { clipPath: "inset(100% 0% 0% 0%)" }));
+              },
+            },
           );
+          if (prev === -1) imgs.forEach((el, j) => j !== i && gsap.set(el, { clipPath: "inset(100% 0% 0% 0%)" }));
         };
-        const leave = () => gsap.to(float, { autoAlpha: 0, scale: 0.6, duration: 0.4 });
+
+        const leave = () => {
+          visible = false;
+          active = -1;
+          gsap.to(float, { autoAlpha: 0, scale: 0.85, rotation: 0, duration: 0.3, ease: "power2.out", overwrite: "auto" });
+        };
 
         const rows = gsap.utils.toArray<HTMLElement>("[data-row]", list);
         const handlers = rows.map((row, i) => {
@@ -75,7 +128,7 @@ export function ServicesList({ id, rowA, items }: Props) {
       });
       return () => mm.revert();
     },
-    { scope: root },
+    { scope: root, dependencies: [mounted], revertOnUpdate: true },
   );
 
   const word = (text: string, outline: boolean) => (
@@ -123,15 +176,24 @@ export function ServicesList({ id, rowA, items }: Props) {
           ))}
         </ul>
 
-        {/* Cursor-following preview */}
-        <div data-float aria-hidden className="pointer-events-none invisible absolute left-0 top-0 z-10 hidden aspect-[4/3] w-[320px] overflow-hidden rounded-2xl shadow-2xl md:block">
-          {items.map((s) => (
-            <div key={s.title} data-float-img className="absolute inset-0" style={{ clipPath: "inset(0% 0% 100% 0%)" }}>
-              <Image src={s.image} alt="" fill sizes="320px" className="object-cover" />
-            </div>
-          ))}
-        </div>
       </div>
+
+      {/* Cursor-following preview (fixed, portalled — never clipped by a row or section) */}
+      {mounted &&
+        createPortal(
+          <div
+            ref={floatRef}
+            aria-hidden
+            className="pointer-events-none invisible fixed left-0 top-0 z-[9000] h-[240px] w-[320px] overflow-hidden rounded-2xl border border-white/10 bg-black shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]"
+          >
+            {items.map((s) => (
+              <div key={s.title} data-float-img className="absolute inset-0">
+                <Image src={s.image} alt="" fill sizes="320px" loading="eager" className="object-cover" />
+              </div>
+            ))}
+          </div>,
+          document.body,
+        )}
     </section>
   );
 }
