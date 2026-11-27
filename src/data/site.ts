@@ -43,8 +43,8 @@ export const brands: Record<Brand, BrandConfig> = {
         title: "Services",
         links: [
           { label: "UX/UI Design", href: "/services" },
-          { label: "Brand Design", href: "/services" },
-          { label: "Website Design & Development", href: "/services" },
+          { label: "Brand Design", href: "/services/logo-design" },
+          { label: "Website Design & Development", href: "/services/web-design" },
           { label: "eCommerce Development", href: "/services" },
           { label: "Bespoke Development", href: "/services" },
         ],

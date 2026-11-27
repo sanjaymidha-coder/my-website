@@ -1,10 +1,10 @@
 import type { ServiceItem } from "./types";
 
 export const codellerServices: ServiceItem[] = [
-  { title: "Web design", image: "/assets/images/webdev.webp", href: "/services" },
-  { title: "Logo design", image: "/assets/images/work/jannah-thumbnail.webp", href: "/services" },
-  { title: "SEO", image: "/assets/images/dashboard.webp", href: "/services" },
-  { title: "Marketing", image: "/assets/images/design-growth/higher-conversion.webp", href: "/services" },
+  { title: "Web design", image: "/assets/images/webdev.webp", href: "/services/web-design" },
+  { title: "Logo design", image: "/assets/images/work/jannah-thumbnail.webp", href: "/services/logo-design" },
+  { title: "SEO", image: "/assets/images/dashboard.webp", href: "/services/seo" },
+  { title: "Marketing", image: "/assets/images/design-growth/higher-conversion.webp", href: "/services/marketing" },
 ];
 
 export const decoServices: ServiceItem[] = [
